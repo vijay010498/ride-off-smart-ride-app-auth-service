@@ -1,11 +1,7 @@
-import { Matches, IsNumber } from 'class-validator';
+import { IsNumber } from 'class-validator';
+import { GenerateOtpDto } from './generate-otp.dto';
 
-export class VerifyOptDto {
-  @Matches(/^\d{3}-\d{3}-\d{4}$/, {
-    message: 'Phone Number must be in format 556-556-4035',
-  })
-  phoneNumber: string;
-
+export class VerifyOptDto extends GenerateOtpDto {
   @IsNumber()
   userOtp: number;
 }
