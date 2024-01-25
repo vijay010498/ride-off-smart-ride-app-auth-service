@@ -5,3 +5,12 @@ content-type: application/json
 {
   "phoneNumber": "437-556-4035"
 }
+
+### Verify OPT
+POST http://localhost:3000/auth/api/otp/verify
+content-type: application/json
+
+{
+  "phoneNumber": "437-556-4035",
+  "userOtp": 623203
+}

@@ -110,21 +110,35 @@ export class OtpService {
 
       // OTP - matches TODO Generate auth tokens
 
-      // delete OTP
-      // TODO - add code to check for existence User from Users Service
-
-      await Promise.all([
+      // delete OTP & check user status
+      // Disable eslint for unused variable _
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const [_, user] = await Promise.all([
         this._deleteOTP(attrs.phoneNumber),
         this.userService.getUserByPhone(attrs.phoneNumber),
       ]);
-    } catch (err) {
-      if (err instanceof UnprocessableEntityException) {
-        throw err;
+
+      let isSignedUp = false;
+      if (user && user.signedUp) {
+        isSignedUp = true;
+      } else if (!user) {
+        await this.userService.createUserByPhone(attrs.phoneNumber);
       }
-      if (err instanceof BadRequestException) {
-        throw err;
+
+      return {
+        status: 'OTP Verified Successfully',
+        isSignedUp,
+        authToken: '', // TODO: Generate auth token
+        refreshToken: '', // TODO: Generate refresh token
+      };
+    } catch (error) {
+      if (
+        error instanceof UnprocessableEntityException ||
+        error instanceof BadRequestException
+      ) {
+        throw error; // Rethrow known exceptions
       } else {
-        console.error(err);
+        console.error(error); // Log unexpected errors
         throw new InternalServerErrorException(
           'Failed to Verify OTP, please try again later',
         );
