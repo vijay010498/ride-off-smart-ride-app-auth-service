@@ -10,4 +10,8 @@ export class MyConfigService {
     console.log('getMongoUri', URI);
     return URI;
   }
+
+  getMongoDatabase(): string {
+    return this.configService.get<string>('MONGO_AUTH_DATABASE');
+  }
 }

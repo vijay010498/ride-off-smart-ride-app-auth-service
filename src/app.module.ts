@@ -10,6 +10,7 @@ import { MyConfigModule } from './my-config/my-config.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MyConfigService } from './my-config/my-config.service';
 import { ConfigModule } from '@nestjs/config';
+import { AwsModule } from './aws/aws.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,6 +22,8 @@ import { ConfigModule } from '@nestjs/config';
       imports: [MyConfigModule],
       useFactory: (configService: MyConfigService) => ({
         uri: configService.getMongoUri(),
+        dbName: configService.getMongoDatabase(),
+        autoIndex: true,
       }),
       inject: [MyConfigService],
     }),
@@ -29,6 +32,7 @@ import { ConfigModule } from '@nestjs/config';
     TokenModule,
     LocationModule,
     ProfileModule,
+    AwsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
