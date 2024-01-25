@@ -14,4 +14,12 @@ export class MyConfigService {
   getMongoDatabase(): string {
     return this.configService.get<string>('MONGO_AUTH_DATABASE');
   }
+
+  getJwtAccessSecret(): string {
+    return this.configService.get<string>('JWT_ACCESS_SECRET');
+  }
+
+  getJwtRefreshSecret(): string {
+    return this.configService.get<string>('JWT_REFRESH_SECRET');
+  }
 }

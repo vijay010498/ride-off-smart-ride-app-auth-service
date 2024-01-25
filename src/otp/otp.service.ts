@@ -11,6 +11,7 @@ import { AwsService } from '../aws/aws.service';
 import { randomBytes } from 'crypto';
 import { VerifyOptDto } from './dtos/verify-opt.dto';
 import { UserService } from '../user/user.service';
+import { TokenService } from '../token/token.service';
 
 @Injectable()
 export class OtpService {
@@ -18,6 +19,7 @@ export class OtpService {
     @InjectModel('Otp') private readonly otpCollection: Model<OtpDocument>,
     private readonly awsService: AwsService,
     private readonly userService: UserService,
+    private readonly tokenService: TokenService,
   ) {}
 
   private _generateOTP(length: number = 6): string {
@@ -90,7 +92,6 @@ export class OtpService {
   }
 
   async verifyOtp(attrs: VerifyOptDto) {
-    // TODO Complete this
     try {
       // NOTE - Enters Critical Code - Use Redis Locks in future
       // Check if OTP exists
@@ -108,12 +109,10 @@ export class OtpService {
         throw new BadRequestException('Verification Failed/ Wrong OTP');
       }
 
-      // OTP - matches TODO Generate auth tokens
-
       // delete OTP & check user status
       // Disable eslint for unused variable _
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const [_, user] = await Promise.all([
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars,prefer-const
+      let [_, user] = await Promise.all([
         this._deleteOTP(attrs.phoneNumber),
         this.userService.getUserByPhone(attrs.phoneNumber),
       ]);
@@ -122,14 +121,23 @@ export class OtpService {
       if (user && user.signedUp) {
         isSignedUp = true;
       } else if (!user) {
-        await this.userService.createUserByPhone(attrs.phoneNumber);
+        user = await this.userService.createUserByPhone(attrs.phoneNumber);
       }
+
+      // OTP - matches - Generate auth tokens
+      const { accessToken, refreshToken } = await this.tokenService.getTokens(
+        user.id,
+        user.phoneNumber,
+      );
+
+      // update refresh token into user collection
+      await this.tokenService.updateRefreshToken(user.id, refreshToken);
 
       return {
         status: 'OTP Verified Successfully',
         isSignedUp,
-        authToken: '', // TODO: Generate auth token
-        refreshToken: '', // TODO: Generate refresh token
+        accessToken,
+        refreshToken,
       };
     } catch (error) {
       if (

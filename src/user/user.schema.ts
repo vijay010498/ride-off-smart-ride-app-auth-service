@@ -12,10 +12,16 @@ export class User {
   })
   phoneNumber: string;
 
+  @Prop()
+  email: string;
+
   @Prop({
     default: false,
   })
   signedUp: boolean;
+
+  @Prop()
+  refreshToken: string;
 }
 
 export type UserDocument = User & Document;
