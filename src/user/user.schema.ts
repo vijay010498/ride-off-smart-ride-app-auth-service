@@ -1,7 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-// TODO complete User Schema
+// interface Location {
+//   lat: number;
+//   lng: number;
+// }
 @Schema({ timestamps: true, id: true })
 export class User {
   @Prop({
@@ -20,8 +23,34 @@ export class User {
   })
   signedUp: boolean;
 
+  @Prop({
+    default: false,
+  })
+  isBlockedByAdmin: boolean;
+
+  @Prop({
+    default: false,
+  })
+  faceIdVerified: boolean;
+
+  @Prop()
+  accessToken: string;
+
   @Prop()
   refreshToken: string;
+
+  @Prop()
+  firstName: string;
+
+  @Prop()
+  lastName: string;
+
+  // TODO correct location field
+  // @Prop({
+  //   type: { type: { type: String }, coordinates: [Number] },
+  //   index: '2dsphere',
+  // })
+  // lastLocation: Location;
 }
 
 export type UserDocument = User & Document;
