@@ -8,6 +8,7 @@ import { IsBlockedGuard } from '../common/guards/isBlocked.guard';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { UserTokens } from '../common/decorators/user-token.decorator';
+import { UserTokensDto } from './dtos/user-tokens.dto';
 @Controller('user')
 @UseInterceptors(CurrentUserInterceptor)
 export class UserController {
@@ -16,9 +17,10 @@ export class UserController {
   @UseGuards(AccessTokenGuard, IsBlockedGuard)
   @Get('/logout')
   @Serialize(UserDto)
-  logout(@CurrentUser() user: any, @UserTokens() tokens: any) {
-    console.log('logout-currentUser', user, tokens);
-    return user;
-    //return this.userService.logout(user.id, ''); // TODO add access token
+  logout(
+    @CurrentUser() user: any,
+    @UserTokens() tokens: Partial<UserTokensDto>,
+  ) {
+    return this.userService.logout(user.id, tokens.accessToken);
   }
 }
