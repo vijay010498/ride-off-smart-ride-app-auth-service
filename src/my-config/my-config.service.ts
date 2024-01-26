@@ -7,7 +7,6 @@ export class MyConfigService {
 
   getMongoUri(): string {
     const URI = this.configService.get<string>('MONGODB_URI_AUTH');
-    console.log('getMongoUri', URI);
     return URI;
   }
 

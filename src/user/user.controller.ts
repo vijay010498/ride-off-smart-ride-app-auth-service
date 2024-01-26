@@ -5,6 +5,8 @@ import { CurrentUserInterceptor } from '../common/interceptors/current-user.inte
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { User } from './user.schema';
 import { IsBlockedGuard } from '../common/guards/isBlocked.guard';
+import { Serialize } from '../common/interceptors/serialize.interceptor';
+import { UserDto } from './dtos/user.dto';
 @Controller('user')
 @UseInterceptors(CurrentUserInterceptor)
 export class UserController {
@@ -12,6 +14,7 @@ export class UserController {
 
   @UseGuards(AccessTokenGuard, IsBlockedGuard)
   @Get('/logout')
+  @Serialize(UserDto)
   logout(@CurrentUser() user: Partial<User>) {
     return user;
   }

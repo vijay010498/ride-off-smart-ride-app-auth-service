@@ -26,7 +26,7 @@ export class User {
   @Prop({
     default: false,
   })
-  isBlockedByAdmin: boolean;
+  isBlocked: boolean;
 
   @Prop({
     default: false,

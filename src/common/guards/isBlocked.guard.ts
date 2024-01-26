@@ -14,7 +14,7 @@ export class IsBlockedGuard implements CanActivate {
 
       const user = await this.userService.findById(userId);
 
-      return user && !user.isBlockedByAdmin;
+      return user && !user.isBlocked;
     } catch (error) {
       console.error('Error in IsBlockedGuard:', error);
       return false;

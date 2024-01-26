@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { MyConfigModule } from '../my-config/my-config.module';
 import { UserModule } from '../user/user.module';
 
+// TODO make use of config service here
 @Module({
   imports: [MyConfigModule, JwtModule.register({}), UserModule],
   controllers: [TokenController],
