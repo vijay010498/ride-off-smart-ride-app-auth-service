@@ -1,0 +1,20 @@
+### Generate OTP for given Phone Number
+POST http://localhost:3000/api/auth/otp/generate
+content-type: application/json
+
+{
+  "phoneNumber": "437-556-4035"
+}
+
+### Verify OPT
+POST http://localhost:3000/api/auth/otp/verify
+content-type: application/json
+
+{
+  "phoneNumber": "437-556-4035",
+  "userOtp": 397791
+}
+
+### Logout an user
+GET http://localhost:3000/api/auth/user/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWIyZmFlOTVlZjQzNTUyZGE0Mzg5NTMiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjI4NTc0NCwiZXhwIjoxNzA4ODc3NzQ0fQ.W3XPx8xm6MTkC-KLL4_F3oYh1s4tm_6528ZtHvhPQow
