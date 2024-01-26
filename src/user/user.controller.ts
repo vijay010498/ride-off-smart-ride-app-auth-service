@@ -3,18 +3,18 @@ import { UserService } from './user.service';
 import { AccessTokenGuard } from '../common/guards/accessToken.guard';
 import { CurrentUserInterceptor } from '../common/interceptors/current-user.interceptor';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
-import { UserDocument } from './user.schema';
 import { IsBlockedGuard } from '../common/guards/isBlocked.guard';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { UserTokens } from '../common/decorators/user-token.decorator';
 import { UserTokensDto } from './dtos/user-tokens.dto';
+import { TokenBlacklistGuard } from '../common/guards/tokenBlacklist.guard';
 @Controller('user')
 @UseInterceptors(CurrentUserInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(AccessTokenGuard, IsBlockedGuard)
+  @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard) // TODO remove TokenBlacklistGuard if not needed for logout
   @Get('/logout')
   @Serialize(UserDto)
   logout(

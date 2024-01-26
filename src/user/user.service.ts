@@ -49,4 +49,10 @@ export class UserService {
 
     await blackListToken.save();
   }
+
+  async tokenInBlackList(accessToken: string) {
+    return this.UserTokenBlacklistCollection.findOne({
+      token: accessToken,
+    });
+  }
 }
