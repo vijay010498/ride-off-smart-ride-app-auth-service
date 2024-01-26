@@ -14,6 +14,9 @@ import { TokenBlacklistGuard } from '../common/guards/tokenBlacklist.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  // TODO - Implement Signup Post API
+
+  // TODO - Implement current user GET APi
   @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard) // TODO remove TokenBlacklistGuard if not needed for logout
   @Get('/logout')
   @Serialize(UserDto)
