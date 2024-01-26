@@ -1,7 +1,7 @@
 import { Controller, Get, UseInterceptors, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AccessTokenGuard } from '../common/guards/accessToken.guard';
-import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
+import { CurrentUserInterceptor } from '../common/interceptors/current-user.interceptor';
 
 @Controller('user')
 @UseInterceptors(CurrentUserInterceptor)

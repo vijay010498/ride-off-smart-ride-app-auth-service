@@ -4,7 +4,7 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { UserService } from '../user.service';
+import { UserService } from '../../user/user.service';
 
 @Injectable()
 export class CurrentUserInterceptor implements NestInterceptor {
@@ -17,9 +17,9 @@ export class CurrentUserInterceptor implements NestInterceptor {
       const user = await this.userService.findById(userId);
       request.currentuser = user;
     }
-    //
-    // console.log('CurrentUserInterceptor', userId);
-    // console.log('currentuser', request.currentuser);
+
+    console.log('CurrentUserInterceptor', userId);
+    console.log('currentuser', request.currentuser);
 
     return next.handle();
   }

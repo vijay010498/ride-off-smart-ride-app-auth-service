@@ -12,9 +12,9 @@ content-type: application/json
 
 {
   "phoneNumber": "437-556-4035",
-  "userOtp":   490731
+  "userOtp":   949012
 }
 
 ### Logout an user
 GET http://localhost:3000/api/auth/user/logout
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWIyZmFlOTVlZjQzNTUyZGE0Mzg5NTMiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjIyOTM5NiwiZXhwIjoxNzA2MjMwMjk2fQ.HY23bh2UppAkkeO9W0CMzHxg1HZFZZQhHCLAICGNidw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWIyZmFlOTVlZjQzNTUyZGE0Mzg5NTMiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjI3Mjc4OCwiZXhwIjoxNzA2MjczNjg4fQ.yWH6B3Mocz-7qx0Cfjqfeebts3PXpUyoRaI7l94PSxo
