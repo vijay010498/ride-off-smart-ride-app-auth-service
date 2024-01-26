@@ -34,9 +34,6 @@ export class User {
   faceIdVerified: boolean;
 
   @Prop()
-  accessToken: string;
-
-  @Prop()
   refreshToken: string;
 
   @Prop()

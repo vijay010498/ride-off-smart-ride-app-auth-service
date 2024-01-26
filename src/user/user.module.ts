@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './user.schema';
 import { CurrentUserInterceptor } from '../common/interceptors/current-user.interceptor';
+import { UserTokenBlacklistSchema } from './user-token-blacklist.schema';
 
 @Module({
   imports: [
@@ -11,6 +12,10 @@ import { CurrentUserInterceptor } from '../common/interceptors/current-user.inte
       {
         name: 'User',
         schema: UserSchema,
+      },
+      {
+        name: 'UserTokenBlacklist',
+        schema: UserTokenBlacklistSchema,
       },
     ]),
   ],
