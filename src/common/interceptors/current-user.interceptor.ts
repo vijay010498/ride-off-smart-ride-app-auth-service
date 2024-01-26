@@ -18,9 +18,6 @@ export class CurrentUserInterceptor implements NestInterceptor {
       request.currentuser = user;
     }
 
-    console.log('CurrentUserInterceptor', userId);
-    console.log('currentuser', request.currentuser);
-
     return next.handle();
   }
 }

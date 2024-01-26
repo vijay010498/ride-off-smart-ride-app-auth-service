@@ -44,14 +44,14 @@ export class TokenService {
         { sub: userId, phoneNumber },
         {
           secret: this.configService.getJwtAccessSecret(),
-          expiresIn: '15m',
+          expiresIn: '30d',
         },
       ),
       this.jwtService.signAsync(
         { sub: userId, phoneNumber },
         {
           secret: this.configService.getJwtRefreshSecret(),
-          expiresIn: '7d',
+          expiresIn: '150d',
         },
       ),
     ]);
