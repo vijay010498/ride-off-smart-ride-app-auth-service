@@ -11,11 +11,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MyConfigService } from './my-config/my-config.service';
 import { ConfigModule } from '@nestjs/config';
 import { AwsModule } from './aws/aws.module';
+import { DevtoolsModule } from '@nestjs/devtools-integration';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
+    }),
+    DevtoolsModule.register({
+      http: process.env.NODE_ENV !== 'production',
     }),
     MyConfigModule,
     MongooseModule.forRootAsync({

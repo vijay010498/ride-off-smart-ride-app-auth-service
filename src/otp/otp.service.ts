@@ -47,6 +47,7 @@ export class OtpService {
     };
   }
 
+  // TODO look into deleteOTP method do we need to return true ?
   private async _deleteOTP(phoneNumber: string) {
     await this.otpCollection.findOneAndDelete({
       phoneNumber,
@@ -138,7 +139,7 @@ export class OtpService {
       await this.tokenService.updateRefreshToken(user.id, refreshToken);
 
       return {
-        status: 'OTP Verified Successfully',
+        message: 'OTP Verified Successfully',
         isSignedUp,
         accessToken,
         refreshToken,
