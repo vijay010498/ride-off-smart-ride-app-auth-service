@@ -16,12 +16,15 @@ import { DevtoolsModule } from '@nestjs/devtools-integration';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
-    DevtoolsModule.register({
-      http: process.env.NODE_ENV !== 'production',
+    DevtoolsModule.registerAsync({
+      imports: [MyConfigModule],
+      useFactory: (configService: MyConfigService) => ({
+        http: configService.getNodeEnv() !== 'production',
+      }),
+      inject: [MyConfigService],
     }),
-    MyConfigModule,
     MongooseModule.forRootAsync({
       imports: [MyConfigModule],
       useFactory: (configService: MyConfigService) => ({

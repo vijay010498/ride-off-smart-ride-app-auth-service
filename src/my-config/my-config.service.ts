@@ -21,4 +21,8 @@ export class MyConfigService {
   getJwtRefreshSecret(): string {
     return this.configService.get<string>('JWT_REFRESH_SECRET');
   }
+
+  getNodeEnv(): string {
+    return this.configService.get<string>('NODE_ENV');
+  }
 }
