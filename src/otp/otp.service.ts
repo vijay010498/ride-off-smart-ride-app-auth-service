@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   UnprocessableEntityException,
+  Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -15,6 +16,7 @@ import { TokenService } from '../token/token.service';
 
 @Injectable()
 export class OtpService {
+  private readonly logger = new Logger(OtpService.name);
   constructor(
     @InjectModel('Otp') private readonly otpCollection: Model<OtpDocument>,
     private readonly awsService: AwsService,
@@ -79,11 +81,13 @@ export class OtpService {
 
       return { success: true, message: 'OTP sent successfully' };
     } catch (err) {
+      this.logger.error('sendOtpError', err);
       if (err instanceof UnprocessableEntityException) {
         throw err;
       } else {
-        // Log or handle unexpected errors
-        console.error(err);
+        // other than defined errors in try block
+        // If anything goes wrong delete OTP if it was saved
+        await this._deleteOTP(phoneNumber);
         throw new InternalServerErrorException(
           'Failed to send OTP, please try again later',
         );
@@ -140,15 +144,45 @@ export class OtpService {
         refreshToken,
       };
     } catch (error) {
+      this.logger.error('verifyOtpError', error);
       if (
         error instanceof UnprocessableEntityException ||
         error instanceof BadRequestException
       ) {
         throw error; // Rethrow known exceptions
       } else {
-        console.error(error); // Log unexpected errors
         throw new InternalServerErrorException(
           'Failed to Verify OTP, please try again later',
+        );
+      }
+    }
+  }
+
+  async resendOtp(phoneNumber: string) {
+    // TODO implement logic to check lastSent time to re-send only after 2 minutes of last sent time in future
+    try {
+      // NOTE - Enters Critical Code - Use Redis Locks in future
+      // Check if OTP exists
+      const [{ otpExists: existingOTP, otpObject }] = await Promise.all([
+        this._OTPExists(phoneNumber),
+      ]);
+
+      // No OTP generated
+      if (!existingOTP) {
+        throw new UnprocessableEntityException('Otp Not generated');
+      }
+
+      // Resend the existing OTP
+      await this.awsService.sendOtpToPhone(phoneNumber, otpObject.otp);
+
+      return { success: true, message: 'OTP re-sent successfully' };
+    } catch (resendOtpError) {
+      this.logger.error('resendOtpError', resendOtpError);
+      if (resendOtpError instanceof UnprocessableEntityException)
+        throw resendOtpError;
+      else {
+        throw new InternalServerErrorException(
+          'Failed to re-send OTP, please try again later',
         );
       }
     }

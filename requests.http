@@ -1,5 +1,13 @@
-### Generate OTP for given Phone Number
+### Generate OTP for the given Phone Number
 POST http://localhost:3000/api/auth/otp/generate
+content-type: application/json
+
+{
+  "phoneNumber": "437-556-4035"
+}
+
+### Resend OTP for the given Phone Number
+POST http://localhost:3000/api/auth/otp/resend
 content-type: application/json
 
 {
