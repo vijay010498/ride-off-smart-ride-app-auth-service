@@ -237,5 +237,6 @@ fabric.properties
 
 
 .idea
+*.env
 
 node_modules
