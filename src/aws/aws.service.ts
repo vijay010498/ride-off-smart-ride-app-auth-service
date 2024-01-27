@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import * as AWS from 'aws-sdk';
+import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
 
 @Injectable()
 export class AwsService {
   private readonly logger = new Logger(AwsService.name);
-  private readonly SNS = new AWS.SNS({
+  private readonly SNS = new SNSClient({
     apiVersion: 'latest',
     region: 'ca-central-1',
     credentials: {
@@ -15,7 +15,7 @@ export class AwsService {
 
   async sendOtpToPhone(phoneNumber: string, OTP: string) {
     const MESSAGE = `Your verification code is ${OTP}, expires in 5 Minutes - Smart Ride App`;
-    const params = {
+    const smsParams = {
       Message: MESSAGE,
       PhoneNumber: `+1${phoneNumber}`,
       MessageAttributes: {
@@ -29,11 +29,9 @@ export class AwsService {
         },
       },
     };
-
-    const publishTextPromise = this.SNS.publish(params).promise();
     try {
-      const data = await Promise.all([publishTextPromise]);
-      this.logger.log('Otp Sent Successfully', data);
+      const response = await this.SNS.send(new PublishCommand(smsParams));
+      this.logger.log('Otp Sent Successfully', response);
     } catch (sendOtpToPhoneError) {
       this.logger.error('sendOtpToPhoneError', sendOtpToPhoneError);
       throw sendOtpToPhoneError;
