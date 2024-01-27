@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
   UnprocessableEntityException,
   Logger,
+  Inject,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -13,12 +14,15 @@ import { randomBytes } from 'crypto';
 import { VerifyOptDto } from './dtos/verify-opt.dto';
 import { UserService } from '../user/user.service';
 import { TokenService } from '../token/token.service';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 
 @Injectable()
 export class OtpService {
   private readonly logger = new Logger(OtpService.name);
+
   constructor(
     @InjectModel('Otp') private readonly otpCollection: Model<OtpDocument>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly awsService: AwsService,
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
@@ -37,6 +41,10 @@ export class OtpService {
     }
 
     return otp;
+  }
+
+  private _getCacheKey(phoneNumber: string) {
+    return `OTP_CACHE#${phoneNumber}`;
   }
 
   private async _OTPExists(phoneNumber: string) {
@@ -80,15 +88,23 @@ export class OtpService {
         this.awsService.sendOtpToPhone(phoneNumber, OTP),
       ]);
 
-      return { success: true, message: 'OTP sent successfully' };
+      // save into cache with 2 minutes TTL
+      await this.cacheManager.set(this._getCacheKey(phoneNumber), true, 120000);
+
+      return {
+        success: true,
+        message: 'OTP sent successfully',
+        resendTime: '2 Minutes',
+      };
     } catch (err) {
       this.logger.error('sendOtpError', err);
       if (err instanceof UnprocessableEntityException) {
         throw err;
       } else {
         // other than defined errors in try block
-        // If anything goes wrong delete OTP if it was saved
+        // If anything goes wrong delete OTP if it was saved // also remove from cache
         await this._deleteOTP(phoneNumber);
+        await this.cacheManager.del(this._getCacheKey(phoneNumber));
         throw new InternalServerErrorException(
           'Failed to send OTP, please try again later',
         );
@@ -160,9 +176,20 @@ export class OtpService {
   }
 
   async resendOtp(phoneNumber: string) {
-    // TODO implement logic to check lastSent time to re-send only after 2 minutes of last sent time in future
     try {
       // NOTE - Enters Critical Code - Use Redis Locks in future
+
+      // check if OTP sent in last 2 minutes in cache
+      const otpSentInCache = await this.cacheManager.get(
+        this._getCacheKey(phoneNumber),
+      );
+
+      if (otpSentInCache) {
+        throw new UnprocessableEntityException(
+          'Otp Sent within last 2 minutes',
+        );
+      }
+
       // Check if OTP exists
       const [{ otpExists: existingOTP, otpObject }] = await Promise.all([
         this._OTPExists(phoneNumber),

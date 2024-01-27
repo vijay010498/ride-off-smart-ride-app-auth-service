@@ -12,11 +12,15 @@ import { MyConfigService } from './my-config/my-config.service';
 import { ConfigModule } from '@nestjs/config';
 import { AwsModule } from './aws/aws.module';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
+import { CacheModule } from '@nestjs/cache-manager';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
+    }),
+    CacheModule.register({
+      isGlobal: true, // So we don't need to register in each module
     }),
     DevtoolsModule.registerAsync({
       imports: [MyConfigModule],
