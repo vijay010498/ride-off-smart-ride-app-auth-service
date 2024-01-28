@@ -1,4 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDocument } from './user.schema';
@@ -6,13 +9,16 @@ import { UpdateTokensDto } from './dtos/update-tokens.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserTokenBlacklistDocument } from './user-token-blacklist.schema';
 import { SignUpDto } from './dtos/sign-up.dto';
+import { AwsService } from '../aws/aws.service';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(AwsService.name);
   constructor(
     @InjectModel('User') private readonly userCollection: Model<UserDocument>,
     @InjectModel('UserTokenBlacklist')
     private readonly UserTokenBlacklistCollection: Model<UserTokenBlacklistDocument>,
+    private readonly awsService: AwsService,
   ) {}
   async getUserByPhone(phoneNumber: string) {
     const user = await this.userCollection.findOne({
@@ -21,9 +27,29 @@ export class UserService {
     return user;
   }
 
-  createUserByPhone(phoneNumber: string) {
-    const user = new this.userCollection({ phoneNumber });
-    return user.save();
+  async createUserByPhone(phoneNumber: string) {
+    try {
+      const user = new this.userCollection({ phoneNumber });
+      await user.save(); // user is saved into DB by phoneNumber
+
+      // TODO check how to give event in aws Service function
+      // SEND EVENT  TO THE AUTH SNS
+      const snsMessage = Object.assign(
+        {},
+        { user },
+        { EVENT_TYPE: 'USER_CREATED_BY_PHONE' },
+      );
+      // TODO DO ASYNC
+      await this.awsService.publishToAuthTopicSNS(JSON.stringify(snsMessage));
+      return user;
+    } catch (createUserByPhone) {
+      if (createUserByPhone.code && createUserByPhone.code === 'SNS_ERROR') {
+        this.logger.error('Error in publish event to SNS');
+      } else {
+        this.logger.error('Error in Creating User By phone', createUserByPhone);
+      }
+      throw new Error('Error in createUserByPhone');
+    }
   }
 
   async findById(id: string) {

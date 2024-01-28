@@ -30,11 +30,34 @@ export class AwsService {
       },
     };
     try {
-      const response = await this.SNS.send(new PublishCommand(smsParams));
-      this.logger.log('Otp Sent Successfully', response);
+      const { MessageId } = await this.SNS.send(new PublishCommand(smsParams));
+      this.logger.log('Otp Sent Successfully Message-ID', MessageId);
     } catch (sendOtpToPhoneError) {
       this.logger.error('sendOtpToPhoneError', sendOtpToPhoneError);
       throw sendOtpToPhoneError;
+    }
+  }
+
+  async publishToAuthTopicSNS(Message: string) {
+    try {
+      const messageParams = {
+        Message,
+        TopicArn: process.env.AUTH_TOPIC_SNS,
+      };
+
+      const { MessageId } = await this.SNS.send(
+        new PublishCommand(messageParams),
+      );
+
+      this.logger.log('publishToAuthTopicSNS-success', MessageId);
+    } catch (publishToAuthTopicSNSError) {
+      this.logger.error(
+        'publishToAuthTopicSNSError',
+        publishToAuthTopicSNSError,
+      );
+      throw Object.assign(new Error('Error in publishToAuthTopicSNS'), {
+        code: 'SNS_ERROR',
+      });
     }
   }
 }

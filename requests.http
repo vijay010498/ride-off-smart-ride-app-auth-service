@@ -20,7 +20,7 @@ content-type: application/json
 
 {
   "phoneNumber": "437-556-4035",
-  "userOtp": 838586
+  "userOtp": 685111
 }
 
 ### Logout an user
@@ -29,11 +29,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI0MGU4Z
 
 ### Signup an user
 POST http://localhost:3000/api/auth/user/signup
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI1OWVjNjliODNlZTJmOGI3NzRlNWIiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjQwMTY3MiwiZXhwIjoxNzA4OTkzNjcyfQ._xZ4NgFSfaGe7u_3on_-s3huDrDxbR92DoHg0IM6o-0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI1ZWRlZGZlMDVjMzkzYWM2OWQzYjAiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjQyMTc0MSwiZXhwIjoxNzA5MDEzNzQxfQ.68UdU4uf5ZESoQED95URwDx_Y8jXI4tUga5Edav-k78
 content-type: application/json
 
 {
-  "email": "svijayq1@gmail.com",
+  "email": "svijayr007@gmail.com",
   "firstName": "Vijay",
   "lastName": "vijay"
 }
