@@ -5,6 +5,7 @@ import { UserDocument } from './user.schema';
 import { UpdateTokensDto } from './dtos/update-tokens.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserTokenBlacklistDocument } from './user-token-blacklist.schema';
+import { SignUpDto } from './dtos/sign-up.dto';
 
 @Injectable()
 export class UserService {
@@ -31,14 +32,17 @@ export class UserService {
   update(
     id: string,
     updateUserDto:
-      | Partial<UpdateTokensDto>
       | UpdateTokensDto
       | UpdateUserDto
-      | Partial<UpdateUserDto>,
+      | Partial<UpdateUserDto>
+      | SignUpDto,
   ) {
     return this.userCollection
       .findByIdAndUpdate(id, updateUserDto, { new: true })
       .exec();
+  }
+  signUp(id: string, signupDto: SignUpDto) {
+    return this.update(id, signupDto);
   }
 
   async logout(userId: string, accessToken: string) {

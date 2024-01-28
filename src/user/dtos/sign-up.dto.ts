@@ -1,16 +1,3 @@
-import { IsEmail, IsString, Matches, isBoolean } from 'class-validator';
+import { UpdateUserDto } from './update-user.dto';
 
-export class SignUpDto {
-    @IsString()
-    firstName: string;
-  
-    @IsString()
-    lastName: string;
-  
-    @IsEmail()
-    email: string;
-    
-    signedUp: boolean;
-
-}
-  
+export class SignUpDto extends UpdateUserDto {}

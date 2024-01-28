@@ -51,4 +51,17 @@ export class User {
 }
 
 export type UserDocument = User & Document;
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
+
+// Hooks to update signedUp bool when user is signing-up
+UserSchema.pre('findOneAndUpdate', async function () {
+  // this.getUpdate() returns {email: 'svijayq1@gmail.com' ,  firstName: 'Vijay',  lastName: 'vijay', '$set': { updatedAt: 2024-01-28T01:37:23.023Z }, '$setOnInsert': { createdAt: 2024-01-28T01:37:23.023Z }
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  const emailUpdated = this.getUpdate().email;
+  if (emailUpdated) {
+    this.set('signedUp', true);
+  }
+});
+
+export { UserSchema };

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, UseInterceptors, UseGuards, Response } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseInterceptors,
+  UseGuards,
+  ConflictException,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { AccessTokenGuard } from '../common/guards/accessToken.guard';
 import { CurrentUserInterceptor } from '../common/interceptors/current-user.interceptor';
@@ -13,28 +21,24 @@ import { SignUpDto } from './dtos/sign-up.dto';
 
 @Controller('user')
 @UseInterceptors(CurrentUserInterceptor)
+@Serialize(UserDto)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
   @Post('/signup')
-  signup(@Body() body: SignUpDto, @CurrentUser() user: any, @Response() res){
-    if(user && user.signedUp){
-      return res.status(409).json({ successful: "false", message: "User is already signed up" });
+  signup(@Body() body: SignUpDto, @CurrentUser() user: any) {
+    // TODO move checking signedUp logic to service in future
+    // User is already signed-up
+    if (user.signedUp) {
+      throw new ConflictException('User is already signed up');
     }
-
-    body.signedUp = true;
-
-    this.userService.update(user.id, body);   
-
-    return res.status(201).json({ successful: "true", message: "Signed up successfully" });
+    return this.userService.signUp(user.id, body);
   }
-
 
   // TODO - Implement current user GET APi
   @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard) // TODO remove TokenBlacklistGuard if not needed for logout
   @Get('/logout')
-  @Serialize(UserDto)
   logout(
     @CurrentUser() user: any,
     @UserTokens() tokens: Partial<UserTokensDto>,

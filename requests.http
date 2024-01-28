@@ -12,9 +12,20 @@ content-type: application/json
 
 {
   "phoneNumber": "437-556-4035",
-  "userOtp": 550037
+  "userOtp": 838586
 }
 
 ### Logout an user
 GET http://localhost:3000/api/auth/user/logout
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI0MGU4ZWFkZWRkNzMwZTFmM2E3NmYiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjI5OTAyMiwiZXhwIjoxNzA4ODkxMDIyfQ.uvI2WCksvIIxI8fqi2FRyrhbSuqnEI8P0emR8Q4V0QU
+
+### Signup an user
+POST http://localhost:3000/api/auth/user/signup
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI1OWVjNjliODNlZTJmOGI3NzRlNWIiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjQwMTY3MiwiZXhwIjoxNzA4OTkzNjcyfQ._xZ4NgFSfaGe7u_3on_-s3huDrDxbR92DoHg0IM6o-0
+content-type: application/json
+
+{
+  "email": "svijayq1@gmail.com",
+  "firstName": "Vijay",
+  "lastName": "vijay"
+}
