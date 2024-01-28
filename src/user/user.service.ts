@@ -11,12 +11,15 @@ import { AwsService } from '../aws/aws.service';
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(AwsService.name);
+
   constructor(
     @InjectModel('User') private readonly userCollection: Model<UserDocument>,
     @InjectModel('UserTokenBlacklist')
     private readonly UserTokenBlacklistCollection: Model<UserTokenBlacklistDocument>,
     private readonly awsService: AwsService,
-  ) {}
+  ) {
+  }
+
   async getUserByPhone(phoneNumber: string) {
     const user = await this.userCollection.findOne({
       phoneNumber,
@@ -29,29 +32,18 @@ export class UserService {
       const user = new this.userCollection({ phoneNumber });
       await user.save(); // user is saved into DB by phoneNumber
 
-      // TODO check how to give event in aws Service function
-      // SEND EVENT  TO THE AUTH SNS
-      const snsMessage = Object.assign(
-        {},
-        { user },
-        { EVENT_TYPE: 'USER_CREATED_BY_PHONE' },
-      );
-      // TODO DO ASYNC
-      await this.awsService.publishToAuthTopicSNS(JSON.stringify(snsMessage));
+      // No need of await since we don't need to wait
+      this.awsService.userCreatedByPhoneEvent(user);
       return user;
     } catch (createUserByPhone) {
-      if (createUserByPhone.code && createUserByPhone.code === 'SNS_ERROR') {
-        this.logger.error('Error in publish event to SNS');
-      } else {
-        this.logger.error('Error in Creating User By phone', createUserByPhone);
-      }
-      throw new Error('Error in createUserByPhone');
+      this.logger.error('Error in Creating User By phone', createUserByPhone);
     }
   }
 
   async findById(id: string) {
     return this.userCollection.findById(id);
   }
+
   update(
     id: string,
     updateUserDto:
@@ -64,6 +56,7 @@ export class UserService {
       .findByIdAndUpdate(id, updateUserDto, { new: true })
       .exec();
   }
+
   signUp(id: string, signupDto: SignUpDto) {
     return this.update(id, signupDto);
   }

@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
 import { MyConfigService } from '../my-config/my-config.service';
+import { UserDocument } from '../user/user.schema';
 
 @Injectable()
 export class AwsService {
@@ -39,11 +40,10 @@ export class AwsService {
       this.logger.log('Otp Sent Successfully Message-ID', MessageId);
     } catch (sendOtpToPhoneError) {
       this.logger.error('sendOtpToPhoneError', sendOtpToPhoneError);
-      throw sendOtpToPhoneError;
     }
   }
 
-  async publishToAuthTopicSNS(Message: string) {
+  private async _publishToAuthTopicARN(Message: string) {
     try {
       const messageParams = {
         Message,
@@ -53,16 +53,22 @@ export class AwsService {
       const { MessageId } = await this.SNS.send(
         new PublishCommand(messageParams),
       );
-
       this.logger.log('publishToAuthTopicSNS-success', MessageId);
-    } catch (publishToAuthTopicSNSError) {
+    } catch (_publishToAuthTopicARNError) {
       this.logger.error(
         'publishToAuthTopicSNSError',
-        publishToAuthTopicSNSError,
+        _publishToAuthTopicARNError,
       );
-      throw Object.assign(new Error('Error in publishToAuthTopicSNS'), {
-        code: 'SNS_ERROR',
-      });
     }
+  }
+
+  async userCreatedByPhoneEvent(
+    user: UserDocument,
+    EVENT_TYPE: string = 'USER_CREATED_BY_PHONE',
+  ) {
+    // {"user":{"phoneNumber":"437-556-4035","signedUp":false,"isBlocked":false,"faceIdVerified":false,"_id":"65b6b425389af836a7
+    // e3c661","createdAt":"2024-01-28T20:08:05.919Z","updatedAt":"2024-01-28T20:08:05.919Z","__v":0},"EVENT_TYPE":"USER_CREATED_BY_PHONE"}
+    const snsMessage = Object.assign({ user }, { EVENT_TYPE });
+    return this._publishToAuthTopicARN(JSON.stringify(snsMessage));
   }
 }
