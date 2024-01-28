@@ -24,6 +24,7 @@ async function bootstrap() {
     'JWT_REFRESH_SECRET',
     'aws_sns_access_key_id',
     'aws_sns_secret_access_key',
+    'AUTH_TOPIC_SNS_ARN',
   ];
 
   const missingVariables = requiredEnvVariables.filter((variable) => {

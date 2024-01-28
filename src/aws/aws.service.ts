@@ -1,17 +1,22 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
+import { MyConfigService } from '../my-config/my-config.service';
 
 @Injectable()
 export class AwsService {
   private readonly logger = new Logger(AwsService.name);
-  private readonly SNS = new SNSClient({
-    apiVersion: 'latest',
-    region: 'ca-central-1',
-    credentials: {
-      accessKeyId: process.env.aws_sns_access_key_id,
-      secretAccessKey: process.env.aws_sns_secret_access_key,
-    },
-  });
+  private readonly SNS: SNSClient;
+
+  constructor(private readonly configService: MyConfigService) {
+    this.SNS = new SNSClient({
+      apiVersion: 'latest',
+      region: 'ca-central-1',
+      credentials: {
+        accessKeyId: this.configService.getAWSSNSAccessID(),
+        secretAccessKey: this.configService.getAWSSNSSecretKey(),
+      },
+    });
+  }
 
   async sendOtpToPhone(phoneNumber: string, OTP: string) {
     const MESSAGE = `Your verification code is ${OTP}, expires in 5 Minutes - Smart Ride App`;
@@ -42,7 +47,7 @@ export class AwsService {
     try {
       const messageParams = {
         Message,
-        TopicArn: process.env.AUTH_TOPIC_SNS,
+        TopicArn: this.configService.getAuthTopicSNSArn(),
       };
 
       const { MessageId } = await this.SNS.send(

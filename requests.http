@@ -20,7 +20,7 @@ content-type: application/json
 
 {
   "phoneNumber": "437-556-4035",
-  "userOtp": 685111
+  "userOtp": 440718
 }
 
 ### Logout an user
@@ -29,7 +29,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI0MGU4Z
 
 ### Signup an user
 POST http://localhost:3000/api/auth/user/signup
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI1ZWRlZGZlMDVjMzkzYWM2OWQzYjAiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjQyMTc0MSwiZXhwIjoxNzA5MDEzNzQxfQ.68UdU4uf5ZESoQED95URwDx_Y8jXI4tUga5Edav-k78
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI2NjJkOTMwNDg0NDc1NDc1NTAzYWMiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjQ1MTY3MywiZXhwIjoxNzA5MDQzNjczfQ.9zP8FNNWdDDzmymdo4ifOP9Q0rAZ7zqO8VQIqWZCQRU
 content-type: application/json
 
 {
