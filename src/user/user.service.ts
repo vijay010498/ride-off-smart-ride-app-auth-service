@@ -32,6 +32,7 @@ export class UserService {
       await user.save(); // user is saved into DB by phoneNumber
 
       // No need of await since we don't need to wait
+      // SNS event
       this.awsService.userCreatedByPhoneEvent(user);
       return user;
     } catch (createUserByPhone) {

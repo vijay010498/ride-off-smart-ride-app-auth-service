@@ -15,16 +15,10 @@ export class TokenService {
     return argon2.hash(data);
   }
 
-  async refreshTokens(userId: string, refreshToken: string) {
-    const user = await this.userService.findById(userId);
-
-    if (!user || !user.refreshToken) {
-      throw new ForbiddenException('Access Denied');
-    }
-
+  async refreshTokens(user: any, requestRefreshToken: string) {
     const refreshTokenMatches = await argon2.verify(
       user.refreshToken,
-      refreshToken,
+      requestRefreshToken,
     );
     if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
     const tokens = await this.getTokens(user.id, user.phoneNumber);
