@@ -1,5 +1,6 @@
 import {
   Body,
+  ConflictException,
   Controller,
   Patch,
   UseGuards,
@@ -24,6 +25,9 @@ export class ProfileController {
   @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
   @Patch('/update')
   updateProfile(@CurrentUser() user: any, @Body() body: UpdateUserDto) {
+    if (!user.SignedUp) {
+      throw new ConflictException('User is not signed up');
+    }
     return this.profileService.updateProfile(user.id, body);
   }
 }

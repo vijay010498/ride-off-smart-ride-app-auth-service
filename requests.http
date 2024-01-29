@@ -19,28 +19,28 @@ POST http://localhost:3000/api/auth/otp/verify
 content-type: application/json
 
 {
-  "phoneNumber": "437-556-4035",
-  "userOtp": 838586
+  "phoneNumber": "647-949-6194",
+  "userOtp": 539074
 }
 
 ### Logout an user
 GET http://localhost:3000/api/auth/user/logout
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI0MGU4ZWFkZWRkNzMwZTFmM2E3NmYiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjI5OTAyMiwiZXhwIjoxNzA4ODkxMDIyfQ.uvI2WCksvIIxI8fqi2FRyrhbSuqnEI8P0emR8Q4V0QU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI4MjgyM2Y1ZDViODljMDNhMTVkZDMiLCJwaG9uZU51bWJlciI6IjY0Ny05NDktNjE5NCIsImlhdCI6MTcwNjU2ODUyNywiZXhwIjoxNzA5MTYwNTI3fQ.VfTEfbgsD9cjriZTQEkr78DdCk1FKLrPF4Z_rcoAZFA
 
 ### Signup an user
 POST http://localhost:3000/api/auth/user/signup
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI1OWVjNjliODNlZTJmOGI3NzRlNWIiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjQwMTY3MiwiZXhwIjoxNzA4OTkzNjcyfQ._xZ4NgFSfaGe7u_3on_-s3huDrDxbR92DoHg0IM6o-0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI4MjgyM2Y1ZDViODljMDNhMTVkZDMiLCJwaG9uZU51bWJlciI6IjY0Ny05NDktNjE5NCIsImlhdCI6MTcwNjU2ODUyNywiZXhwIjoxNzA5MTYwNTI3fQ.VfTEfbgsD9cjriZTQEkr78DdCk1FKLrPF4Z_rcoAZFA
 content-type: application/json
 
 {
-  "email": "svijayq1@gmail.com",
-  "firstName": "Vijay",
-  "lastName": "vijay"
+  "email": "derryckdxd@gmail.com",
+  "firstName": "Derryck",
+  "lastName": "Dowuona"
 }
 
 ### Update User profile
-POST http://localhost:3000/api/auth/profile/update
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI1OWVjNjliODNlZTJmOGI3NzRlNWIiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjQwMTY3MiwiZXhwIjoxNzA4OTkzNjcyfQ._xZ4NgFSfaGe7u_3on_-s3huDrDxbR92DoHg0IM6o-0
+PATCH http://localhost:3000/api/auth/profile/update
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI4MjgyM2Y1ZDViODljMDNhMTVkZDMiLCJwaG9uZU51bWJlciI6IjY0Ny05NDktNjE5NCIsImlhdCI6MTcwNjU2ODUyNywiZXhwIjoxNzA5MTYwNTI3fQ.VfTEfbgsD9cjriZTQEkr78DdCk1FKLrPF4Z_rcoAZFA
 content-type: application/json
 
 {
