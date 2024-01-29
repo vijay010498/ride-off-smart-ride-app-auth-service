@@ -15,7 +15,7 @@ import { IsBlockedGuard } from '../common/guards/isBlocked.guard';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { UserTokens } from '../common/decorators/user-token.decorator';
-import { UserTokensDto } from './dtos/user-tokens.dto';
+import { UserTokensDto } from '../common/dtos/user-tokens.dto';
 import { TokenBlacklistGuard } from '../common/guards/tokenBlacklist.guard';
 import { SignUpDto } from './dtos/sign-up.dto';
 

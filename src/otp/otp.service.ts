@@ -126,7 +126,7 @@ export class OtpService {
       }
 
       // OTP not-matches
-      if (otpObject.otp !== attrs.userOtp.toString()) {
+      if (otpObject.otp !== attrs.userOtp) {
         throw new BadRequestException('Verification Failed/ Wrong OTP');
       }
 
