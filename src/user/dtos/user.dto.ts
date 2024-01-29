@@ -1,4 +1,5 @@
 import { Expose, Transform } from 'class-transformer';
+import { LastLocation } from '../user.schema';
 
 export class UserDto {
   @Expose()
@@ -18,6 +19,9 @@ export class UserDto {
 
   @Expose()
   isBlocked: boolean;
+
+  @Expose()
+  lastLocation: LastLocation;
 
   @Expose()
   signedUp: boolean;

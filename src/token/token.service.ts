@@ -28,9 +28,7 @@ export class TokenService {
 
   async updateRefreshToken(userId: string, refreshToken: string) {
     const hashedRefreshToken = await this.hashData(refreshToken);
-    return this.userService.update(userId, {
-      refreshToken: hashedRefreshToken,
-    });
+    return this.userService.updateRefreshToken(userId, hashedRefreshToken);
   }
   async getTokens(userId: string, phoneNumber: string) {
     const [accessToken, refreshToken] = await Promise.all([

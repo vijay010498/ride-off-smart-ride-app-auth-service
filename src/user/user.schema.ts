@@ -1,10 +1,17 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+export enum GeoJSONType {
+  Point = 'Point',
+}
+interface Location {
+  type: GeoJSONType;
+  coordinates: [number, number]; // [longitude, latitude]
+}
 
-// interface Location {
-//   lat: number;
-//   lng: number;
-// }
+export type LastLocation = {
+  lastLocation: Location;
+};
+
 @Schema({ timestamps: true, id: true })
 export class User {
   @Prop({
@@ -42,12 +49,11 @@ export class User {
   @Prop()
   lastName: string;
 
-  // TODO correct location field
-  // @Prop({
-  //   type: { type: { type: String }, coordinates: [Number] },
-  //   index: '2dsphere',
-  // })
-  // lastLocation: Location;
+  @Prop({
+    type: { type: String, default: GeoJSONType.Point, enum: GeoJSONType }, // GeoJSON type
+    coordinates: { type: [Number], default: [0, 0] }, // [longitude, latitude]
+  })
+  lastLocation: Location;
 }
 
 export type UserDocument = User & Document;
@@ -63,5 +69,8 @@ UserSchema.pre('findOneAndUpdate', async function () {
     this.set('signedUp', true);
   }
 });
+
+// Create 2dsphere index for lastLocation
+UserSchema.index({ lastLocation: '2dsphere' });
 
 export { UserSchema };
