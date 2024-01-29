@@ -6,8 +6,7 @@ export class MyConfigService {
   constructor(private readonly configService: ConfigService) {}
 
   getMongoUri(): string {
-    const URI = this.configService.get<string>('MONGODB_URI_AUTH');
-    return URI;
+    return this.configService.get<string>('MONGODB_URI_AUTH');
   }
 
   getMongoDatabase(): string {
@@ -24,5 +23,17 @@ export class MyConfigService {
 
   getNodeEnv(): string {
     return this.configService.get<string>('NODE_ENV');
+  }
+
+  getAWSSNSAccessID(): string {
+    return this.configService.get<string>('aws_sns_access_key_id');
+  }
+
+  getAWSSNSSecretKey(): string {
+    return this.configService.get<string>('aws_sns_secret_access_key');
+  }
+
+  getAuthTopicSNSArn(): string {
+    return this.configService.get<string>('AUTH_TOPIC_SNS_ARN');
   }
 }

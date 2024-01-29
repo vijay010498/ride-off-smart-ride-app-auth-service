@@ -34,7 +34,7 @@ export class TokenService {
 
   async updateRefreshToken(userId: string, refreshToken: string) {
     const hashedRefreshToken = await this.hashData(refreshToken);
-    await this.userService.update(userId, {
+    return this.userService.update(userId, {
       refreshToken: hashedRefreshToken,
     });
   }
