@@ -7,7 +7,6 @@ type JwtPayload = {
   phoneNumber: string;
 };
 export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
-  // TODO make use of config service
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
