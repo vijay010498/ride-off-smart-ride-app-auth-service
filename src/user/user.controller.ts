@@ -36,7 +36,6 @@ export class UserController {
     return this.userService.signUp(user.id, body);
   }
 
-  // TODO - Implement current user GET APi
   @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard) // TODO remove TokenBlacklistGuard if not needed for logout
   @Get('/logout')
   logout(
@@ -44,5 +43,15 @@ export class UserController {
     @UserTokens() tokens: Partial<UserTokensDto>,
   ) {
     return this.userService.logout(user.id, tokens.accessToken);
+  }
+
+  // TODO - Implement current user GET APi
+  @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard) 
+  @Get('/details')
+  @Serialize(UserDto)
+  details(
+    @CurrentUser() user: any
+  ) {
+    return user;
   }
 }
