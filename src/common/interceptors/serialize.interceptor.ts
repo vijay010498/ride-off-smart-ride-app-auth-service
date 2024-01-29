@@ -1,6 +1,7 @@
 import {
   CallHandler,
   ExecutionContext,
+  Logger,
   NestInterceptor,
   UseInterceptors,
 } from '@nestjs/common';
@@ -17,6 +18,7 @@ export function Serialize(dto: ClassConstructor) {
 }
 
 export class SerializeInterceptor implements NestInterceptor {
+  private readonly logger = new Logger(SerializeInterceptor.name);
   constructor(private dto: any) {}
 
   intercept(
@@ -24,11 +26,11 @@ export class SerializeInterceptor implements NestInterceptor {
     next: CallHandler<any>,
   ): Observable<any> | Promise<Observable<any>> {
     // run something before req handled by the request handler
-    console.log('I am running before the handler');
+    this.logger.log('I am running before the handler');
     return next.handle().pipe(
       map((data: any) => {
         // run something before response is sent out
-        console.log('I am running before the response is sent out', data);
+        this.logger.log('I am running before the response is sent out', data);
         return plainToInstance(this.dto, data, {
           excludeExtraneousValues: true,
         });

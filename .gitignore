@@ -237,5 +237,10 @@ fabric.properties
 
 
 .idea
+*.env*
 
 node_modules
+
+dist
+
+.vscode
