@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDocument } from './user.schema';
 import { UpdateTokensDto } from './dtos/update-tokens.dto';
-import { UpdateUserDto } from './dtos/update-user.dto';
+import { UpdateUserDto } from '../common/dtos/update-user.dto';
 import { UserTokenBlacklistDocument } from './user-token-blacklist.schema';
 import { SignUpDto } from './dtos/sign-up.dto';
 import { AwsService } from '../aws/aws.service';
