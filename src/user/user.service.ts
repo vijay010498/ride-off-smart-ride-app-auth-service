@@ -17,8 +17,7 @@ export class UserService {
     @InjectModel('UserTokenBlacklist')
     private readonly UserTokenBlacklistCollection: Model<UserTokenBlacklistDocument>,
     private readonly awsService: AwsService,
-  ) {
-  }
+  ) {}
 
   async getUserByPhone(phoneNumber: string) {
     const user = await this.userCollection.findOne({
