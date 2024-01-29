@@ -45,13 +45,9 @@ export class UserController {
     return this.userService.logout(user.id, tokens.accessToken);
   }
 
-  // TODO - Implement current user GET APi
-  @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard) 
-  @Get('/details')
-  @Serialize(UserDto)
-  details(
-    @CurrentUser() user: any
-  ) {
+  @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
+  @Get('')
+  details(@CurrentUser() user: any) {
     return user;
   }
 }
