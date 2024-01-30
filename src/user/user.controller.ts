@@ -38,7 +38,7 @@ export class UserController {
     return this.userService.signUp(user.id, body);
   }
 
-  @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard) // TODO remove TokenBlacklistGuard if not needed for logout
+  @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
   @Get('/logout')
   logout(
     @CurrentUser() user: any,
