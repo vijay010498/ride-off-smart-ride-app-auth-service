@@ -2,7 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
-  Patch, Put,
+  Put,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -24,7 +24,7 @@ export class ProfileController {
 
   @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
   @Put('')
-  updateProfile(@CurrentUser() user: any, @Body() body: UpdateUserDto) {
+  updateProfile(@Body() body: UpdateUserDto, @CurrentUser() user: any) {
     if (!user.signedUp) {
       throw new BadRequestException('User is not signed up');
     }

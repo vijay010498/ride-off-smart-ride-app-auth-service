@@ -1,12 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserDocument } from './user.schema';
+import { GeoJSONType, UserDocument, LastLocation } from './user.schema';
 import { UpdateTokensDto } from './dtos/update-tokens.dto';
 import { UpdateUserDto } from '../common/dtos/update-user.dto';
 import { UserTokenBlacklistDocument } from './user-token-blacklist.schema';
 import { SignUpDto } from './dtos/sign-up.dto';
 import { AwsService } from '../aws/aws.service';
+import { UpdateUserLocationDto } from './dtos/update-user-location.dto';
 
 @Injectable()
 export class UserService {
@@ -44,25 +45,34 @@ export class UserService {
     return this.userCollection.findById(id);
   }
 
-  update(
+  private async _update(
     id: string,
     updateUserDto:
       | UpdateTokensDto
       | UpdateUserDto
       | Partial<UpdateUserDto>
-      | SignUpDto,
+      | SignUpDto
+      | LastLocation,
   ) {
     return this.userCollection
       .findByIdAndUpdate(id, updateUserDto, { new: true })
       .exec();
   }
 
+  async updateRefreshToken(userId: string, refreshToken: string = null) {
+    return this._update(userId, { refreshToken });
+  }
+
   signUp(id: string, signupDto: SignUpDto) {
-    return this.update(id, signupDto);
+    return this._update(id, signupDto);
+  }
+
+  updateProfile(userId: string, updateUserDto: UpdateUserDto) {
+    return this._update(userId, updateUserDto);
   }
 
   async logout(userId: string, accessToken: string) {
-    await this.update(userId, { refreshToken: null });
+    await this._update(userId, { refreshToken: null });
     const blackListToken = new this.UserTokenBlacklistCollection({
       token: accessToken,
     });
@@ -74,5 +84,15 @@ export class UserService {
     return this.UserTokenBlacklistCollection.findOne({
       token: accessToken,
     });
+  }
+
+  async updateUserLocation(userId: string, location: UpdateUserLocationDto) {
+    const updateUserLocationDto: LastLocation = {
+      lastLocation: {
+        type: GeoJSONType.Point,
+        coordinates: [location.longitude, location.latitude],
+      },
+    };
+    return this._update(userId, updateUserLocationDto);
   }
 }

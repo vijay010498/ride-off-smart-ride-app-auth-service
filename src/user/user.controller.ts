@@ -6,6 +6,7 @@ import {
   UseInterceptors,
   UseGuards,
   ConflictException,
+  Patch,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AccessTokenGuard } from '../common/guards/accessToken.guard';
@@ -18,6 +19,7 @@ import { UserTokens } from '../common/decorators/user-token.decorator';
 import { UserTokensDto } from '../common/dtos/user-tokens.dto';
 import { TokenBlacklistGuard } from '../common/guards/tokenBlacklist.guard';
 import { SignUpDto } from './dtos/sign-up.dto';
+import { UpdateUserLocationDto } from './dtos/update-user-location.dto';
 
 @Controller('user')
 @UseInterceptors(CurrentUserInterceptor)
@@ -43,6 +45,15 @@ export class UserController {
     @UserTokens() tokens: Partial<UserTokensDto>,
   ) {
     return this.userService.logout(user.id, tokens.accessToken);
+  }
+  @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
+  @Patch('/location')
+  updateLocation(
+    @Body() location: UpdateUserLocationDto,
+    @CurrentUser() user: any,
+  ) {
+    this.userService.updateUserLocation(user.id, location);
+    return;
   }
 
   @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)

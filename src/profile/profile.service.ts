@@ -7,6 +7,6 @@ export class ProfileService {
   constructor(private readonly userService: UserService) {}
 
   updateProfile(id: string, updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+    return this.userService.updateProfile(id, updateUserDto);
   }
 }
