@@ -13,7 +13,7 @@ import { CurrentUserInterceptor } from '../common/interceptors/current-user.inte
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { IsBlockedGuard } from '../common/guards/isBlocked.guard';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
-import { UserDto } from './dtos/user.dto';
+import { UserDto } from '../common/dtos/user.dto';
 import { UserTokens } from '../common/decorators/user-token.decorator';
 import { UserTokensDto } from '../common/dtos/user-tokens.dto';
 import { TokenBlacklistGuard } from '../common/guards/tokenBlacklist.guard';
