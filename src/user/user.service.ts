@@ -63,12 +63,24 @@ export class UserService {
     return this._update(userId, { refreshToken });
   }
 
-  signUp(id: string, signupDto: SignUpDto) {
-    return this._update(id, signupDto);
+  async signUp(id: string, signupDto: SignUpDto) {
+    const updatedUser: UserDocument = await this._update(id, signupDto);
+
+    // No need of await since we don't need to wait
+    // SNS event
+    this.awsService.userUpdatedEvent(updatedUser);
+
+    return updatedUser;
   }
 
-  updateProfile(userId: string, updateUserDto: UpdateUserDto) {
-    return this._update(userId, updateUserDto);
+  // Update User - Used in Profile Service
+  async updateProfile(userId: string, updateUserDto: UpdateUserDto) {
+    const updatedUser = await this._update(userId, updateUserDto);
+
+    // No need of await since we don't need to wait
+    // SNS event
+    this.awsService.userUpdatedEvent(updatedUser);
+    return updatedUser;
   }
 
   async logout(userId: string, accessToken: string) {
@@ -93,6 +105,10 @@ export class UserService {
         coordinates: [location.longitude, location.latitude],
       },
     };
-    return this._update(userId, updateUserLocationDto);
+    const updatedUser = await this._update(userId, updateUserLocationDto);
+    // No need of await since we don't need to wait
+    // SNS event
+    this.awsService.userUpdatedEvent(updatedUser);
+    return updatedUser;
   }
 }

@@ -68,7 +68,22 @@ export class AwsService {
   ) {
     // {"user":{"phoneNumber":"437-556-4035","signedUp":false,"isBlocked":false,"faceIdVerified":false,"_id":"65b6b425389af836a7
     // e3c661","createdAt":"2024-01-28T20:08:05.919Z","updatedAt":"2024-01-28T20:08:05.919Z","__v":0},"EVENT_TYPE":"USER_CREATED_BY_PHONE"}
-    const snsMessage = Object.assign({ user }, { EVENT_TYPE });
+    const snsMessage = Object.assign({ user }, { EVENT_TYPE, userId: user.id });
+    return this._publishToAuthTopicARN(JSON.stringify(snsMessage));
+  }
+
+  async userUpdatedEvent(
+    updatedUser: UserDocument,
+    EVENT_TYPE: string = 'USER_UPDATED',
+  ) {
+    const snsMessage = Object.assign(
+      { updatedUser },
+      { EVENT_TYPE, userId: updatedUser.id },
+    );
+    // {"updatedUser":{"lastLocation":{"type":"Point","coordinates":[-80.5579867,43.4347027]},"_id":"65b84dffb9fe51e7778da
+    // e01","phoneNumber":"437-556-4035","signedUp":true,"isBlocked":false,"faceIdVerified":false,"createdAt":"2024-01-30T01:16:47.309Z","updatedAt":"2024-01-30T02:54:36.7
+    // 98Z","__v":0,"refreshToken":"$argon2id$v=19$m=65536,t=3,p=4$L9kCI9oGymc92QJ6E31ZSQ$LrgPnRhnzilT9GNdWJAxyLIp2pvR7SJNtxTz18jsRNE","email":"derryckdxd@gmail.com","firs
+    // tName":"Derryck","lastName":"Dowuona"},"EVENT_TYPE":"USER_UPDATED","userId":"65b84dffb9fe51e7778dae01"}
     return this._publishToAuthTopicARN(JSON.stringify(snsMessage));
   }
 }
