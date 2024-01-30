@@ -67,6 +67,10 @@ export class UserService {
     return this._update(id, signupDto);
   }
 
+  updateProfile(userId: string, updateUserDto: UpdateUserDto) {
+    return this._update(userId, updateUserDto);
+  }
+
   async logout(userId: string, accessToken: string) {
     await this._update(userId, { refreshToken: null });
     const blackListToken = new this.UserTokenBlacklistCollection({
