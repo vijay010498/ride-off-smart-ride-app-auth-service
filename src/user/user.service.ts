@@ -93,12 +93,12 @@ export class UserService {
   }
 
   async tokenInBlackList(accessToken: string) {
-    await this.UserTokenBlacklistCollection.findOne({
+    const tokenInBlackList = await this.UserTokenBlacklistCollection.findOne({
       token: accessToken,
     });
     // SNS event
     this.awsService.tokenBlackListEvent(accessToken);
-    return;
+    return tokenInBlackList;
   }
 
   async updateUserLocation(userId: string, location: UpdateUserLocationDto) {
