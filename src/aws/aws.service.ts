@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
 import { MyConfigService } from '../my-config/my-config.service';
 import { UserDocument } from '../user/user.schema';
+import { Events } from './events.enums';
 
 @Injectable()
 export class AwsService {
@@ -64,7 +65,7 @@ export class AwsService {
 
   async userCreatedByPhoneEvent(
     user: UserDocument,
-    EVENT_TYPE: string = 'USER_CREATED_BY_PHONE',
+    EVENT_TYPE: string = Events.userCreatedByPhone,
   ) {
     // {"user":{"phoneNumber":"437-556-4035","signedUp":false,"isBlocked":false,"faceIdVerified":false,"_id":"65b6b425389af836a7
     // e3c661","createdAt":"2024-01-28T20:08:05.919Z","updatedAt":"2024-01-28T20:08:05.919Z","__v":0},"EVENT_TYPE":"USER_CREATED_BY_PHONE"}
@@ -74,7 +75,7 @@ export class AwsService {
 
   async userUpdatedEvent(
     updatedUser: UserDocument,
-    EVENT_TYPE: string = 'USER_UPDATED',
+    EVENT_TYPE: string = Events.userUpdated,
   ) {
     const snsMessage = Object.assign(
       { updatedUser },
@@ -89,7 +90,7 @@ export class AwsService {
 
   async tokenBlackListEvent(
     token: string,
-    EVENT_TYPE: string = 'TOKEN_BLACKLIST',
+    EVENT_TYPE: string = Events.tokenBlackList,
   ) {
     return this._publishToAuthTopicARN(JSON.stringify({ token, EVENT_TYPE }));
   }
