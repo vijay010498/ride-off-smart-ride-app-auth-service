@@ -90,14 +90,14 @@ export class UserService {
     });
 
     await blackListToken.save();
+    // SNS event
+    this.awsService.tokenBlackListEvent(accessToken);
   }
 
   async tokenInBlackList(accessToken: string) {
     const tokenInBlackList = await this.UserTokenBlacklistCollection.findOne({
       token: accessToken,
     });
-    // SNS event
-    this.awsService.tokenBlackListEvent(accessToken);
     return tokenInBlackList;
   }
 
