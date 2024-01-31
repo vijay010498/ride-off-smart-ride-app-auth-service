@@ -11,7 +11,7 @@ import { UpdateUserLocationDto } from './dtos/update-user-location.dto';
 
 @Injectable()
 export class UserService {
-  private readonly logger = new Logger(AwsService.name);
+  private readonly logger = new Logger(UserService.name);
 
   constructor(
     @InjectModel('User') private readonly userCollection: Model<UserDocument>,
@@ -93,9 +93,12 @@ export class UserService {
   }
 
   async tokenInBlackList(accessToken: string) {
-    return this.UserTokenBlacklistCollection.findOne({
+    await this.UserTokenBlacklistCollection.findOne({
       token: accessToken,
     });
+    // SNS event
+    this.awsService.tokenBlackListEvent(accessToken);
+    return;
   }
 
   async updateUserLocation(userId: string, location: UpdateUserLocationDto) {

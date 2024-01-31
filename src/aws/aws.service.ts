@@ -86,4 +86,11 @@ export class AwsService {
     // tName":"Derryck","lastName":"Dowuona"},"EVENT_TYPE":"USER_UPDATED","userId":"65b84dffb9fe51e7778dae01"}
     return this._publishToAuthTopicARN(JSON.stringify(snsMessage));
   }
+
+  async tokenBlackListEvent(
+    token: string,
+    EVENT_TYPE: string = 'TOKEN_BLACKLIST',
+  ) {
+    return this._publishToAuthTopicARN(JSON.stringify({ token, EVENT_TYPE }));
+  }
 }
