@@ -89,7 +89,8 @@ export class OtpService {
       ]);
 
       // save into cache with 2 minutes TTL
-      await this.cacheManager.set(this._getCacheKey(phoneNumber), true, 120000);
+      // for now it's only 30 seconds
+      await this.cacheManager.set(this._getCacheKey(phoneNumber), true, 30000); // TODO update cache time similar to OTP expiration time
 
       return {
         success: true,

@@ -20,7 +20,7 @@ content-type: application/json
 
 {
   "phoneNumber": "437-556-4035",
-  "userOtp": "515243"
+  "userOtp": "914814"
 }
 
 ### Logout an user
@@ -66,4 +66,4 @@ content-type: application/json
 
 ### get Current User
 GET http://localhost:3000/api/auth/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI4NGRmZmI5ZmU1MWU3Nzc4ZGFlMDEiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjU3ODU4MywiZXhwIjoxNzA5MTcwNTgzfQ.Qyz9zLvELlw7kpUJ9TzIJCqAPwQvnTWJjYMJIk-j_90
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI5ZDE4ZDg3MjNmNjQ2MDFiOTBmZGEiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjY3NjYyMSwiZXhwIjoxNzA5MjY4NjIxfQ.jQsCrlcyOF1DFQ80am_Ca6CmHMTB-k-JKTU8Se2rEp8
