@@ -1,5 +1,5 @@
 export enum Events {
-  userCreatedByPhone = 'USER_CREATED_BY_PHONE',
-  userUpdated = 'USER_UPDATED',
-  tokenBlackList = 'TOKEN_BLACKLIST',
+  userCreatedByPhone = 'AUTH_USER_CREATED_BY_PHONE',
+  userUpdated = 'AUTH_USER_UPDATED',
+  tokenBlackList = 'AUTH_TOKEN_BLACKLIST',
 }
