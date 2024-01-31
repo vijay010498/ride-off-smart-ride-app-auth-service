@@ -44,7 +44,6 @@ export class SqsService implements OnModuleInit {
 
     // Define the function to execute for polling
     const pollFunction = async () => {
-      console.log('inside-polling');
       try {
         const messages: Message[] = await this.receiveMessages(
           this.configService.getSqsQueueURL(),
