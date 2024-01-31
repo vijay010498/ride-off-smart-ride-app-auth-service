@@ -24,7 +24,12 @@ async function bootstrap() {
     'JWT_REFRESH_SECRET',
     'aws_sns_access_key_id',
     'aws_sns_secret_access_key',
+    'aws_sqs_access_key_id',
+    'aws_sqs_secret_access_key',
     'AUTH_TOPIC_SNS_ARN',
+    'aws_sqs_queue_name',
+    'aws_sqs_queue_url',
+    'aws_region',
   ];
 
   const missingVariables = requiredEnvVariables.filter((variable) => {

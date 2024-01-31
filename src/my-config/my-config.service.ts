@@ -36,4 +36,24 @@ export class MyConfigService {
   getAuthTopicSNSArn(): string {
     return this.configService.get<string>('AUTH_TOPIC_SNS_ARN');
   }
+
+  getAWSSQSAccessID(): string {
+    return this.configService.get<string>('aws_sqs_access_key_id');
+  }
+
+  getAWSSQSSecretKey(): string {
+    return this.configService.get<string>('aws_sqs_secret_access_key');
+  }
+
+  getAwsRegion(): string {
+    return this.configService.get<string>('aws_region');
+  }
+
+  getSqsQueueName(): string {
+    return this.configService.get<string>('aws_sqs_queue_name');
+  }
+
+  getSqsQueueURL(): string {
+    return this.configService.get<string>('aws_sqs_queue_url');
+  }
 }
