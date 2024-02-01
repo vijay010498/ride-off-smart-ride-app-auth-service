@@ -55,7 +55,6 @@ export class OtpService {
     };
   }
 
-  // TODO look into deleteOTP method do we need to return true ?
   private async _deleteOTP(phoneNumber: string) {
     await this.otpCollection.findOneAndDelete({
       phoneNumber,
@@ -89,6 +88,8 @@ export class OtpService {
       ]);
 
       // save into cache with 2 minutes TTL
+      // Users can request for resent OTP after 2 minutes of last sent time
+      // Note: OTP expires in 5 minutes
       await this.cacheManager.set(this._getCacheKey(phoneNumber), true, 120000);
 
       return {

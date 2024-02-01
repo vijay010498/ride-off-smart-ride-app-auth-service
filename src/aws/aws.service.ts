@@ -12,7 +12,7 @@ export class AwsService {
   constructor(private readonly configService: MyConfigService) {
     this.SNS = new SNSClient({
       apiVersion: 'latest',
-      region: 'ca-central-1',
+      region: this.configService.getAwsRegion(),
       credentials: {
         accessKeyId: this.configService.getAWSSNSAccessID(),
         secretAccessKey: this.configService.getAWSSNSSecretKey(),

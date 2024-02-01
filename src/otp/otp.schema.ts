@@ -23,6 +23,6 @@ export class Otp {
 }
 
 const OtpSchema = SchemaFactory.createForClass(Otp);
-OtpSchema.index({ createdAt: 1 }, { expireAfterSeconds: 30 }); // 5 minutes TODO update to required time later
+OtpSchema.index({ createdAt: 1 }, { expireAfterSeconds: 300 }); // 5 minutes
 export type OtpDocument = Otp & Document;
 export { OtpSchema };

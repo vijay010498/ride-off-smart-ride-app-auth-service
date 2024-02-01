@@ -20,7 +20,7 @@ content-type: application/json
 
 {
   "phoneNumber": "437-556-4035",
-  "userOtp": "515243"
+  "userOtp": "294275"
 }
 
 ### Logout an user
@@ -29,7 +29,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI2YjEyZ
 
 ### Signup an user
 POST http://localhost:3000/api/auth/user/signup
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI5Y2YwYmJmOTI0NGE1NmFjOTY0ZTYiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjY3NTk3OSwiZXhwIjoxNzA5MjY3OTc5fQ.iKi0ERJ3dBsqpb4fPwI2lcF7Zziqjx-QxIxrgVjDaNU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWJhNzNmNWU0MGFkZDk1MThmMGI0NDIiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjcxODE5NywiZXhwIjoxNzA5MzEwMTk3fQ.fB4LEtKwW4v-4--meNBhf4RHmheSp-0OInfcgIvGKyQ
 content-type: application/json
 
 {
@@ -55,7 +55,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI2YjgwO
 
 ### Update User Current Location
 PATCH http://localhost:3000/api/auth/user/location
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI4MTAzYmNiOTI2NDQ2ZmEwNjQwMjkiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjU2MTU5NSwiZXhwIjoxNzA5MTUzNTk1fQ.XevbXNUzVo1jnHB5HA6DUe6MhX8YS1PwPoSju_pWSeA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWJhNzNmNWU0MGFkZDk1MThmMGI0NDIiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjcxODE5NywiZXhwIjoxNzA5MzEwMTk3fQ.fB4LEtKwW4v-4--meNBhf4RHmheSp-0OInfcgIvGKyQ
 content-type: application/json
 
 {
@@ -66,4 +66,4 @@ content-type: application/json
 
 ### get Current User
 GET http://localhost:3000/api/auth/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI4NGRmZmI5ZmU1MWU3Nzc4ZGFlMDEiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjU3ODU4MywiZXhwIjoxNzA5MTcwNTgzfQ.Qyz9zLvELlw7kpUJ9TzIJCqAPwQvnTWJjYMJIk-j_90
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI5ZDE4ZDg3MjNmNjQ2MDFiOTBmZGEiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjY3NjYyMSwiZXhwIjoxNzA5MjY4NjIxfQ.jQsCrlcyOF1DFQ80am_Ca6CmHMTB-k-JKTU8Se2rEp8
