@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MyConfigService } from '../my-config/my-config.service';
 import * as argon2 from 'argon2';
@@ -16,14 +20,22 @@ export class TokenService {
   }
 
   async refreshTokens(user: any, requestRefreshToken: string) {
-    const refreshTokenMatches = await argon2.verify(
-      user.refreshToken,
-      requestRefreshToken,
-    );
-    if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
-    const tokens = await this.getTokens(user.id, user.phoneNumber);
-    await this.updateRefreshToken(user.id, tokens.refreshToken);
-    return tokens;
+    try {
+      const refreshTokenMatches = await argon2.verify(
+        user.refreshToken,
+        requestRefreshToken,
+      );
+      if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
+      const tokens = await this.getTokens(user.id, user.phoneNumber);
+      await this.updateRefreshToken(user.id, tokens.refreshToken);
+      return tokens;
+    } catch (error) {
+      if (error instanceof ForbiddenException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Server Error');
+
+    }
   }
 
   async updateRefreshToken(userId: string, refreshToken: string) {
