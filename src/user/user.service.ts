@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { GeoJSONType, UserDocument, LastLocation } from './user.schema';
 import { UpdateTokensDto } from './dtos/update-tokens.dto';
 import { UpdateUserDto } from '../common/dtos/update-user.dto';
@@ -8,6 +8,7 @@ import { UserTokenBlacklistDocument } from './user-token-blacklist.schema';
 import { SignUpDto } from './dtos/sign-up.dto';
 import { UpdateUserLocationDto } from './dtos/update-user-location.dto';
 import { SnsService } from '../sns/sns.service';
+import { UserFaceVerifiedDto } from './dtos/user-face-verified.dto';
 
 @Injectable()
 export class UserService {
@@ -50,6 +51,7 @@ export class UserService {
     updateUserDto:
       | UpdateTokensDto
       | UpdateUserDto
+      | UserFaceVerifiedDto
       | Partial<UpdateUserDto>
       | SignUpDto
       | LastLocation,
@@ -112,6 +114,23 @@ export class UserService {
     // No need of await since we don't need to wait
     // SNS event
     this.snsService.userUpdatedEvent(updatedUser);
+    return updatedUser;
+  }
+
+  async userFaceVerified(
+    userId: string,
+    verificationId: mongoose.Types.ObjectId,
+  ) {
+    const userFaceVerifiedDto: UserFaceVerifiedDto = {
+      faceIdVerified: true,
+      faceVerificationId: verificationId,
+    };
+
+    const updatedUser = await this._update(userId, userFaceVerifiedDto);
+
+    // SNS event
+    this.snsService.userUpdatedEvent(updatedUser);
+
     return updatedUser;
   }
 }

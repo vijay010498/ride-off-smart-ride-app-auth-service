@@ -2,6 +2,7 @@ import {
   ForbiddenException,
   Injectable,
   InternalServerErrorException,
+  Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MyConfigService } from '../my-config/my-config.service';
@@ -9,6 +10,7 @@ import * as argon2 from 'argon2';
 import { UserService } from '../user/user.service';
 @Injectable()
 export class TokenService {
+  private logger = new Logger(TokenService.name);
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: MyConfigService,
@@ -21,6 +23,8 @@ export class TokenService {
 
   async refreshTokens(user: any, requestRefreshToken: string) {
     try {
+      if (!user.refreshToken)
+        throw new ForbiddenException('Please Login First');
       const refreshTokenMatches = await argon2.verify(
         user.refreshToken,
         requestRefreshToken,
@@ -30,6 +34,7 @@ export class TokenService {
       await this.updateRefreshToken(user.id, tokens.refreshToken);
       return tokens;
     } catch (error) {
+      this.logger.error('refreshTokens-service-error', error);
       if (error instanceof ForbiddenException) {
         throw error;
       }

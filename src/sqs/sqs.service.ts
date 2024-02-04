@@ -50,8 +50,15 @@ export class SqsService implements OnModuleInit {
         );
         if (messages.length > 0) {
           // Process received messages
-          await this.sqsProcessor.ProcessSqsMessage(messages);
-          await this._deleteMessages(messages);
+          try {
+            await this.sqsProcessor.ProcessSqsMessage(messages);
+            await this._deleteMessages(messages);
+          } catch (error) {
+            this.logger.error(
+              'Error occurred during sqs message processing / deleting:',
+              error,
+            );
+          }
         }
       } catch (error) {
         this.logger.error('Error occurred during polling:', error);
@@ -97,6 +104,7 @@ export class SqsService implements OnModuleInit {
       };
 
       await this.SQS.send(new DeleteMessageBatchCommand(deleteRequest));
+      this.logger.log('Messages deleted from SQS');
     } catch (error) {
       console.error('Error deleting messages from SQS:', error);
       throw error;
