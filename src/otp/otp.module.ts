@@ -3,9 +3,9 @@ import { OtpController } from './otp.controller';
 import { OtpService } from './otp.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { OtpSchema } from './otp.schema';
-import { AwsModule } from '../aws/aws.module';
 import { UserModule } from '../user/user.module';
 import { TokenModule } from '../token/token.module';
+import { SnsModule } from '../sns/sns.module';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { TokenModule } from '../token/token.module';
         schema: OtpSchema,
       },
     ]),
-    AwsModule,
+    SnsModule,
     UserModule,
     TokenModule,
   ],

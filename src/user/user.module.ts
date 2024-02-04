@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from './user.schema';
 import { UserTokenBlacklistSchema } from './user-token-blacklist.schema';
-import { AwsModule } from '../aws/aws.module';
+import { SnsModule } from '../sns/sns.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { AwsModule } from '../aws/aws.module';
         schema: UserTokenBlacklistSchema,
       },
     ]),
-    AwsModule,
+    SnsModule,
   ],
   controllers: [UserController],
   providers: [UserService],

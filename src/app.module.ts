@@ -10,11 +10,11 @@ import { MyConfigModule } from './my-config/my-config.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MyConfigService } from './my-config/my-config.service';
 import { ConfigModule } from '@nestjs/config';
-import { AwsModule } from './aws/aws.module';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { CacheModule } from '@nestjs/cache-manager';
 import { SqsModule } from './sqs/sqs.module';
 import { SqsProcessorModule } from './sqs_processor/sqs_processor.module';
+import { SnsModule } from './sns/sns.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -45,9 +45,9 @@ import { SqsProcessorModule } from './sqs_processor/sqs_processor.module';
     TokenModule,
     LocationModule,
     ProfileModule,
-    AwsModule,
     SqsModule,
     SqsProcessorModule,
+    SnsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
