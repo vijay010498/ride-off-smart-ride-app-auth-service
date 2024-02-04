@@ -34,7 +34,6 @@ export class TokenService {
         throw error;
       }
       throw new InternalServerErrorException('Server Error');
-
     }
   }
 
