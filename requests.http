@@ -20,7 +20,7 @@ content-type: application/json
 
 {
   "phoneNumber": "437-556-4035",
-  "userOtp": "294275"
+  "userOtp": "755685"
 }
 
 ### Logout an user
@@ -29,7 +29,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI2YjEyZ
 
 ### Signup an user
 POST http://localhost:3000/api/auth/user/signup
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWJhNzNmNWU0MGFkZDk1MThmMGI0NDIiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjcxODE5NywiZXhwIjoxNzA5MzEwMTk3fQ.fB4LEtKwW4v-4--meNBhf4RHmheSp-0OInfcgIvGKyQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWJlYjNmMWE4ZDg1MGQ1OWIyNDY4YjUiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjk5NjcyMSwiZXhwIjoxNzA5NTg4NzIxfQ.vV5tSvOt3aa6lZk8xKZ49OvivOKh5EglYPwTrAv7Om8
 content-type: application/json
 
 {
@@ -55,7 +55,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWI2YjgwO
 
 ### Update User Current Location
 PATCH http://localhost:3000/api/auth/user/location
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWJhNzNmNWU0MGFkZDk1MThmMGI0NDIiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjcxODE5NywiZXhwIjoxNzA5MzEwMTk3fQ.fB4LEtKwW4v-4--meNBhf4RHmheSp-0OInfcgIvGKyQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWJlYjNmMWE4ZDg1MGQ1OWIyNDY4YjUiLCJwaG9uZU51bWJlciI6IjQzNy01NTYtNDAzNSIsImlhdCI6MTcwNjk5NjcyMSwiZXhwIjoxNzA5NTg4NzIxfQ.vV5tSvOt3aa6lZk8xKZ49OvivOKh5EglYPwTrAv7Om8
 content-type: application/json
 
 {
