@@ -15,7 +15,7 @@ import { GenerateOtpResponseDto } from './dtos/generate-otp-response.dto';
 import { VerifyOtpResponseDto } from './dtos/verify-otp-response.dto';
 import { ResendOtpResponseDto } from './dtos/resend-otp-response.dto';
 
-@ApiTags('otp')
+@ApiTags('OTP')
 @Controller('otp')
 export class OtpController {
   constructor(private readonly optService: OtpService) {}

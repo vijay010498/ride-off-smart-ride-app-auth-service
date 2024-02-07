@@ -57,9 +57,11 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Auth Service')
     .setDescription('Smart Ride App Authentication Service')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config, {
     deepScanRoutes: true,
+    ignoreGlobalPrefix: true,
   });
   SwaggerModule.setup('api', app, document);
 
