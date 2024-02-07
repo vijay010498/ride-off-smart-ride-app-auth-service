@@ -15,14 +15,29 @@ import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 import { IsBlockedGuard } from 'src/common/guards/isBlocked.guard';
 import { TokenBlacklistGuard } from 'src/common/guards/tokenBlacklist.guard';
 import { UpdateUserDto } from 'src/common/dtos/update-user.dto';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('PROFILE')
 @Controller('profile')
 @UseInterceptors(CurrentUserInterceptor)
 @Serialize(UserDto)
+@UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
-  @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
+  @ApiBadRequestResponse({
+    description: 'User is not signed up',
+  })
+  @ApiCreatedResponse({
+    description: 'User Profile Updated',
+    type: UserDto,
+  })
   @Put('')
   updateProfile(@Body() body: UpdateUserDto, @CurrentUser() user: any) {
     if (!user.signedUp) {

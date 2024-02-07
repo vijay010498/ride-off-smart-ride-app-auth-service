@@ -135,11 +135,13 @@ export class OtpService {
       }
 
       // delete OTP & check user status
+      // also remove OTP from cache
       // Disable eslint for unused variable _
       // eslint-disable-next-line @typescript-eslint/no-unused-vars,prefer-const
       let [_, user] = await Promise.all([
         this._deleteOTP(attrs.phoneNumber),
         this.userService.getUserByPhone(attrs.phoneNumber),
+        this.cacheManager.del(this._getCacheKey(attrs.phoneNumber)),
       ]);
 
       let isSignedUp = false;

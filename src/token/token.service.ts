@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { MyConfigService } from '../my-config/my-config.service';
 import * as argon2 from 'argon2';
 import { UserService } from '../user/user.service';
+import { RefreshTokenResponseDto } from './dtos/refresh-token-response.dto';
 @Injectable()
 export class TokenService {
   private logger = new Logger(TokenService.name);
@@ -30,9 +31,15 @@ export class TokenService {
         requestRefreshToken,
       );
       if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
-      const tokens = await this.getTokens(user.id, user.phoneNumber);
-      await this.updateRefreshToken(user.id, tokens.refreshToken);
-      return tokens;
+      const { accessToken, refreshToken } = await this.getTokens(
+        user.id,
+        user.phoneNumber,
+      );
+      await this.updateRefreshToken(user.id, refreshToken);
+      return new RefreshTokenResponseDto({
+        accessToken,
+        refreshToken,
+      });
     } catch (error) {
       this.logger.error('refreshTokens-service-error', error);
       if (error instanceof ForbiddenException) {
