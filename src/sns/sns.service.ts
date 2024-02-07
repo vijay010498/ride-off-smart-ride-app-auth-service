@@ -1,12 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
+import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 import { MyConfigService } from '../my-config/my-config.service';
 import { UserDocument } from '../user/user.schema';
-import { Events } from './events.enums';
+import { Events } from '../common/enums/events.enums';
 
 @Injectable()
-export class AwsService {
-  private readonly logger = new Logger(AwsService.name);
+export class SnsService {
+  private readonly logger = new Logger(SnsService.name);
   private readonly SNS: SNSClient;
 
   constructor(private readonly configService: MyConfigService) {

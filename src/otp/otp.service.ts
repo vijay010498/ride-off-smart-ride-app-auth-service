@@ -9,12 +9,12 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { OtpDocument } from './otp.schema';
-import { AwsService } from '../aws/aws.service';
 import { randomBytes } from 'crypto';
 import { VerifyOptDto } from './dtos/verify-opt.dto';
 import { UserService } from '../user/user.service';
 import { TokenService } from '../token/token.service';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
+import { SnsService } from '../sns/sns.service';
 
 @Injectable()
 export class OtpService {
@@ -23,7 +23,7 @@ export class OtpService {
   constructor(
     @InjectModel('Otp') private readonly otpCollection: Model<OtpDocument>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private readonly awsService: AwsService,
+    private readonly snsService: SnsService,
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
   ) {}
@@ -84,7 +84,7 @@ export class OtpService {
       const otpDocument = new this.otpCollection({ phoneNumber, otp: OTP });
       await Promise.all([
         otpDocument.save(),
-        this.awsService.sendOtpToPhone(phoneNumber, OTP),
+        this.snsService.sendOtpToPhone(phoneNumber, OTP),
       ]);
 
       // save into cache with 2 minutes TTL
@@ -202,7 +202,7 @@ export class OtpService {
       }
 
       // Resend the existing OTP
-      await this.awsService.sendOtpToPhone(phoneNumber, otpObject.otp);
+      await this.snsService.sendOtpToPhone(phoneNumber, otpObject.otp);
 
       return { success: true, message: 'OTP re-sent successfully' };
     } catch (resendOtpError) {

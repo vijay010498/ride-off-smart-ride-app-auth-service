@@ -1,13 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { GeoJSONType, UserDocument, LastLocation } from './user.schema';
 import { UpdateTokensDto } from './dtos/update-tokens.dto';
 import { UpdateUserDto } from '../common/dtos/update-user.dto';
 import { UserTokenBlacklistDocument } from './user-token-blacklist.schema';
 import { SignUpDto } from './dtos/sign-up.dto';
-import { AwsService } from '../aws/aws.service';
 import { UpdateUserLocationDto } from './dtos/update-user-location.dto';
+import { SnsService } from '../sns/sns.service';
+import { UserFaceVerifiedDto } from './dtos/user-face-verified.dto';
 
 @Injectable()
 export class UserService {
@@ -17,7 +18,7 @@ export class UserService {
     @InjectModel('User') private readonly userCollection: Model<UserDocument>,
     @InjectModel('UserTokenBlacklist')
     private readonly UserTokenBlacklistCollection: Model<UserTokenBlacklistDocument>,
-    private readonly awsService: AwsService,
+    private readonly snsService: SnsService,
   ) {}
 
   async getUserByPhone(phoneNumber: string) {
@@ -34,7 +35,7 @@ export class UserService {
 
       // No need of await since we don't need to wait
       // SNS event
-      this.awsService.userCreatedByPhoneEvent(user);
+      this.snsService.userCreatedByPhoneEvent(user);
       return user;
     } catch (createUserByPhone) {
       this.logger.error('Error in Creating User By phone', createUserByPhone);
@@ -50,6 +51,7 @@ export class UserService {
     updateUserDto:
       | UpdateTokensDto
       | UpdateUserDto
+      | UserFaceVerifiedDto
       | Partial<UpdateUserDto>
       | SignUpDto
       | LastLocation,
@@ -68,7 +70,7 @@ export class UserService {
 
     // No need of await since we don't need to wait
     // SNS event
-    this.awsService.userUpdatedEvent(updatedUser);
+    this.snsService.userUpdatedEvent(updatedUser);
 
     return updatedUser;
   }
@@ -79,7 +81,7 @@ export class UserService {
 
     // No need of await since we don't need to wait
     // SNS event
-    this.awsService.userUpdatedEvent(updatedUser);
+    this.snsService.userUpdatedEvent(updatedUser);
     return updatedUser;
   }
 
@@ -91,7 +93,7 @@ export class UserService {
 
     await blackListToken.save();
     // SNS event
-    this.awsService.tokenBlackListEvent(accessToken);
+    this.snsService.tokenBlackListEvent(accessToken);
   }
 
   async tokenInBlackList(accessToken: string) {
@@ -111,7 +113,24 @@ export class UserService {
     const updatedUser = await this._update(userId, updateUserLocationDto);
     // No need of await since we don't need to wait
     // SNS event
-    this.awsService.userUpdatedEvent(updatedUser);
+    this.snsService.userUpdatedEvent(updatedUser);
+    return updatedUser;
+  }
+
+  async userFaceVerified(
+    userId: string,
+    verificationId: mongoose.Types.ObjectId,
+  ) {
+    const userFaceVerifiedDto: UserFaceVerifiedDto = {
+      faceIdVerified: true,
+      faceVerificationId: verificationId,
+    };
+
+    const updatedUser = await this._update(userId, userFaceVerifiedDto);
+
+    // SNS event
+    this.snsService.userUpdatedEvent(updatedUser);
+
     return updatedUser;
   }
 }
