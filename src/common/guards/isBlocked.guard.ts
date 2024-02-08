@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { UserService } from '../../user/user.service';
 
 @Injectable()
@@ -14,7 +19,12 @@ export class IsBlockedGuard implements CanActivate {
 
       const user = await this.userService.findById(userId);
 
-      return user && !user.isBlocked;
+      if (!user) throw new ForbiddenException('User Does not exist');
+      if (user.isBlocked)
+        throw new ForbiddenException(
+          'User is Blocked, Please Send Email to contact@smartride.io',
+        );
+      return true;
     } catch (error) {
       console.error('Error in IsBlockedGuard:', error);
       return false;

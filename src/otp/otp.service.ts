@@ -15,6 +15,9 @@ import { UserService } from '../user/user.service';
 import { TokenService } from '../token/token.service';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { SnsService } from '../sns/sns.service';
+import { GenerateOtpResponseDto } from './dtos/generate-otp-response.dto';
+import { VerifyOtpResponseDto } from './dtos/verify-otp-response.dto';
+import { ResendOtpResponseDto } from './dtos/resend-otp-response.dto';
 
 @Injectable()
 export class OtpService {
@@ -92,11 +95,11 @@ export class OtpService {
       // Note: OTP expires in 5 minutes
       await this.cacheManager.set(this._getCacheKey(phoneNumber), true, 120000);
 
-      return {
+      return new GenerateOtpResponseDto({
         success: true,
         message: 'OTP sent successfully',
-        resendTime: '2 Minutes',
-      };
+        resendTime: '2 Minutes', // TODO update into Milliseconds
+      });
     } catch (err) {
       this.logger.error('sendOtpError', err);
       if (err instanceof UnprocessableEntityException) {
@@ -132,11 +135,13 @@ export class OtpService {
       }
 
       // delete OTP & check user status
+      // also remove OTP from cache
       // Disable eslint for unused variable _
       // eslint-disable-next-line @typescript-eslint/no-unused-vars,prefer-const
       let [_, user] = await Promise.all([
         this._deleteOTP(attrs.phoneNumber),
         this.userService.getUserByPhone(attrs.phoneNumber),
+        this.cacheManager.del(this._getCacheKey(attrs.phoneNumber)),
       ]);
 
       let isSignedUp = false;
@@ -155,12 +160,12 @@ export class OtpService {
       // update refresh token into user collection
       await this.tokenService.updateRefreshToken(user.id, refreshToken);
 
-      return {
+      return new VerifyOtpResponseDto({
         message: 'OTP Verified Successfully',
         isSignedUp,
         accessToken,
         refreshToken,
-      };
+      });
     } catch (error) {
       this.logger.error('verifyOtpError', error);
       if (
@@ -204,7 +209,10 @@ export class OtpService {
       // Resend the existing OTP
       await this.snsService.sendOtpToPhone(phoneNumber, otpObject.otp);
 
-      return { success: true, message: 'OTP re-sent successfully' };
+      return new ResendOtpResponseDto({
+        success: true,
+        message: 'OTP re-sent successfully',
+      });
     } catch (resendOtpError) {
       this.logger.error('resendOtpError', resendOtpError);
       if (resendOtpError instanceof UnprocessableEntityException)

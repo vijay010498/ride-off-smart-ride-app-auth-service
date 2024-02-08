@@ -7,6 +7,8 @@ import {
   UseGuards,
   ConflictException,
   Patch,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AccessTokenGuard } from '../common/guards/accessToken.guard';
@@ -20,14 +22,35 @@ import { UserTokensDto } from '../common/dtos/user-tokens.dto';
 import { TokenBlacklistGuard } from '../common/guards/tokenBlacklist.guard';
 import { SignUpDto } from './dtos/sign-up.dto';
 import { UpdateUserLocationDto } from './dtos/update-user-location.dto';
+import {
+  ApiBearerAuth,
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('USER')
+@ApiForbiddenResponse({
+  description: 'AccessToken is not Valid / User is blocked',
+})
 @Controller('user')
 @UseInterceptors(CurrentUserInterceptor)
+@UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
 @Serialize(UserDto)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
+  @ApiConflictResponse({
+    description: 'User is already signed up',
+  })
+  @ApiCreatedResponse({
+    description: 'User Signed Up',
+    type: UserDto,
+  })
   @Post('/signup')
   signup(@Body() body: SignUpDto, @CurrentUser() user: any) {
     // TODO move checking signedUp logic to service in future
@@ -38,7 +61,9 @@ export class UserController {
     return this.userService.signUp(user.id, body);
   }
 
-  @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
+  @ApiNoContentResponse({
+    description: 'Logout an User',
+  })
   @Get('/logout')
   logout(
     @CurrentUser() user: any,
@@ -46,7 +71,11 @@ export class UserController {
   ) {
     return this.userService.logout(user.id, tokens.accessToken);
   }
-  @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
+
+  @ApiNoContentResponse({
+    description: 'Update User Current Location',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Patch('/location')
   updateLocation(
     @Body() location: UpdateUserLocationDto,
@@ -56,7 +85,10 @@ export class UserController {
     return;
   }
 
-  @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
+  @ApiOkResponse({
+    description: 'Get Current User',
+    type: UserDto,
+  })
   @Get('')
   details(@CurrentUser() user: any) {
     return user;
