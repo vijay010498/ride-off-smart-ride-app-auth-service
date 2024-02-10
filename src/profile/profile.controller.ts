@@ -19,11 +19,19 @@ import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
 @ApiBearerAuth()
 @ApiTags('PROFILE')
+@ApiForbiddenResponse({
+  description: 'User is blocked',
+})
+@ApiUnauthorizedResponse({
+  description: 'Invalid Token',
+})
 @Controller('profile')
 @UseInterceptors(CurrentUserInterceptor)
 @Serialize(UserDto)

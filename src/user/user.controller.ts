@@ -30,12 +30,16 @@ import {
   ApiNoContentResponse,
   ApiOkResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
 @ApiBearerAuth()
 @ApiTags('USER')
 @ApiForbiddenResponse({
-  description: 'AccessToken is not Valid / User is blocked',
+  description: 'User is blocked',
+})
+@ApiUnauthorizedResponse({
+  description: 'Invalid Token',
 })
 @Controller('user')
 @UseInterceptors(CurrentUserInterceptor)

@@ -11,6 +11,7 @@ import {
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { RefreshTokenResponseDto } from './dtos/refresh-token-response.dto';
 
@@ -18,7 +19,10 @@ import { RefreshTokenResponseDto } from './dtos/refresh-token-response.dto';
 @ApiBearerAuth()
 @Controller('token')
 @ApiForbiddenResponse({
-  description: 'Refresh token is not Valid / User is blocked',
+  description: 'User is blocked',
+})
+@ApiUnauthorizedResponse({
+  description: 'Invalid Token',
 })
 @UseInterceptors(CurrentUserInterceptor)
 @UseGuards(RefreshTokenGuard, IsBlockedGuard)
