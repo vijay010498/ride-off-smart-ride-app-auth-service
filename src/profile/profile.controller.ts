@@ -32,6 +32,9 @@ import {
 @ApiUnauthorizedResponse({
   description: 'Invalid Token',
 })
+@ApiBadRequestResponse({
+  description: 'User Does not exist',
+})
 @Controller('profile')
 @UseInterceptors(CurrentUserInterceptor)
 @Serialize(UserDto)

@@ -7,6 +7,7 @@ import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UserTokens } from '../common/decorators/user-token.decorator';
 import { UserTokensDto } from '../common/dtos/user-tokens.dto';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiForbiddenResponse,
   ApiOkResponse,
@@ -23,6 +24,9 @@ import { RefreshTokenResponseDto } from './dtos/refresh-token-response.dto';
 })
 @ApiUnauthorizedResponse({
   description: 'Invalid Token',
+})
+@ApiBadRequestResponse({
+  description: 'User Does not exist',
 })
 @UseInterceptors(CurrentUserInterceptor)
 @UseGuards(RefreshTokenGuard, IsBlockedGuard)

@@ -23,6 +23,7 @@ import { TokenBlacklistGuard } from '../common/guards/tokenBlacklist.guard';
 import { SignUpDto } from './dtos/sign-up.dto';
 import { UpdateUserLocationDto } from './dtos/update-user-location.dto';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
@@ -40,6 +41,9 @@ import {
 })
 @ApiUnauthorizedResponse({
   description: 'Invalid Token',
+})
+@ApiBadRequestResponse({
+  description: 'User Does not exist',
 })
 @Controller('user')
 @UseInterceptors(CurrentUserInterceptor)
