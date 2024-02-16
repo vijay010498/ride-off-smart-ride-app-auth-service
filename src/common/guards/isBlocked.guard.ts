@@ -28,7 +28,11 @@ export class IsBlockedGuard implements CanActivate {
         );
       return true;
     } catch (error) {
-      if (error instanceof ForbiddenException) rethrow(error);
+      if (
+        error instanceof ForbiddenException ||
+        error instanceof BadRequestException
+      )
+        rethrow(error);
       console.error('Error in IsBlockedGuard:', error);
       return false;
     }
