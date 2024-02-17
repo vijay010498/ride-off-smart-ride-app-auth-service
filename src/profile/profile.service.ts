@@ -13,6 +13,7 @@ import {
   UserVehicle,
   UserVehicleDocument,
 } from './schemas/user-vehicle.schema';
+import { SnsService } from '../sns/sns.service';
 
 @Injectable()
 export class ProfileService {
@@ -22,6 +23,7 @@ export class ProfileService {
     private readonly userVehicleCollection: Model<UserVehicleDocument>,
     private readonly userService: UserService,
     private readonly s3: S3Service,
+    private readonly sns: SnsService,
   ) {}
 
   updateProfile(id: string, updateUserDto: UpdateUserDto) {
@@ -74,7 +76,12 @@ export class ProfileService {
       _id: vehicleId,
       ...vehicleObject,
     });
-    return vehicle.save();
+    await vehicle.save();
+
+    // SNS Event
+    this.sns.newVehicleCreatedEvent(vehicle);
+
+    return vehicle;
   }
 
   async getUserVehicles(userId: mongoose.Types.ObjectId) {
@@ -87,9 +94,14 @@ export class ProfileService {
     vehicleId: mongoose.Types.ObjectId,
     userId: mongoose.Types.ObjectId,
   ) {
-    return this.userVehicleCollection.findOneAndDelete({
+    const deletedVehicle = await this.userVehicleCollection.findOneAndDelete({
       _id: vehicleId,
       userId,
     });
+
+    // SNS Event
+    this.sns.vehicleDeletedEvent(deletedVehicle);
+
+    return deletedVehicle;
   }
 }

@@ -5,6 +5,7 @@ import { UserModule } from '../user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserVehicleSchema } from './schemas/user-vehicle.schema';
 import { S3Module } from '../s3/s3.module';
+import { SnsModule } from '../sns/sns.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { S3Module } from '../s3/s3.module';
     ]),
     UserModule,
     S3Module,
+    SnsModule,
   ],
   controllers: [ProfileController],
   providers: [ProfileService],

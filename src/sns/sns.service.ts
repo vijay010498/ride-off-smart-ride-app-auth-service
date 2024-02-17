@@ -3,6 +3,7 @@ import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 import { MyConfigService } from '../my-config/my-config.service';
 import { UserDocument } from '../user/user.schema';
 import { Events } from '../common/enums/events.enums';
+import { UserVehicleDocument } from '../profile/schemas/user-vehicle.schema';
 
 @Injectable()
 export class SnsService {
@@ -85,6 +86,24 @@ export class SnsService {
     // e01","phoneNumber":"437-556-4035","signedUp":true,"isBlocked":false,"faceIdVerified":false,"createdAt":"2024-01-30T01:16:47.309Z","updatedAt":"2024-01-30T02:54:36.7
     // 98Z","__v":0,"refreshToken":"$argon2id$v=19$m=65536,t=3,p=4$L9kCI9oGymc92QJ6E31ZSQ$LrgPnRhnzilT9GNdWJAxyLIp2pvR7SJNtxTz18jsRNE","email":"derryckdxd@gmail.com","firs
     // tName":"Derryck","lastName":"Dowuona"},"EVENT_TYPE":"USER_UPDATED","userId":"65b84dffb9fe51e7778dae01"}
+    return this._publishToAuthTopicARN(JSON.stringify(snsMessage));
+  }
+
+  async newVehicleCreatedEvent(newVehicle: UserVehicleDocument) {
+    const snsMessage = Object.assign(
+      { newVehicle },
+      { EVENT_TYPE: Events.newVehicleCreated },
+    );
+
+    return this._publishToAuthTopicARN(JSON.stringify(snsMessage));
+  }
+
+  async vehicleDeletedEvent(deletedVehicle: UserVehicleDocument) {
+    const snsMessage = Object.assign(
+      { deletedVehicle },
+      { EVENT_TYPE: Events.vehicleDeleted },
+    );
+
     return this._publishToAuthTopicARN(JSON.stringify(snsMessage));
   }
 

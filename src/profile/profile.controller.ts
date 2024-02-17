@@ -40,7 +40,6 @@ import { ImageFileFilter } from './ImageFileFilter';
 import { VehicleImagesDto } from './dtos/vehicle-images.dto';
 import { VehicleTypeEnum } from './schemas/user-vehicle.schema';
 import { VehicleDto } from './dtos/vehicle.dto';
-import mongoose from 'mongoose';
 import { DeleteVehicleDto } from './dtos/delete-vehicle.dto';
 
 @ApiBearerAuth()
