@@ -20,7 +20,7 @@ content-type: application/json
 
 {
   "phoneNumber": "437-556-4035",
-  "userOtp": "162191"
+  "userOtp": "898896"
 }
 
 ### Logout an user
