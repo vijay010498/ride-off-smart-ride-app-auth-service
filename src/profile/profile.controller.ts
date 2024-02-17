@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Post,
   Put,
   UploadedFiles,
@@ -24,7 +25,9 @@ import {
   ApiConsumes,
   ApiCreatedResponse,
   ApiForbiddenResponse,
+  ApiInternalServerErrorResponse,
   ApiOperation,
+  ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -32,6 +35,7 @@ import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ImageFileFilter } from './ImageFileFilter';
 import { VehicleImagesDto } from './dtos/vehicle-images.dto';
+import { CreateVehicleResponseDto } from './dtos/create-vehicle-response.dto';
 import { VehicleTypeEnum } from './schemas/user-vehicle.schema';
 
 @ApiBearerAuth()
@@ -47,10 +51,21 @@ import { VehicleTypeEnum } from './schemas/user-vehicle.schema';
 })
 @Controller('profile')
 @UseInterceptors(CurrentUserInterceptor)
-@Serialize(UserDto)
 @UseGuards(AccessTokenGuard, IsBlockedGuard, TokenBlacklistGuard)
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
+
+  // Vehicles
+  @Get('/vehicle/types')
+  @ApiOperation({
+    summary: 'Get Available Vehicle Types',
+  })
+  @ApiResponse({
+    type: [String],
+  })
+  getSupportedVehicleTypes() {
+    return Object.values(VehicleTypeEnum);
+  }
 
   @Post('/vehicle')
   @ApiConsumes('multipart/form-data')
@@ -120,20 +135,34 @@ export class ProfileController {
       },
     ),
   )
+  @ApiInternalServerErrorResponse({
+    description: 'Error Creating New Vehicle, Please try again later',
+  })
+  @ApiCreatedResponse({
+    description: 'New Vehicle Created',
+    type: CreateVehicleResponseDto,
+  })
   createNewVehicle(
     @Body() body: CreateVehicleDto,
     @UploadedFiles() files: VehicleImagesDto,
     @CurrentUser() user: any,
   ) {
     if (!files || !files.vehicleImages || !files.vehicleImages.length) {
-      throw new BadRequestException('At-least One Vehicle Image Must Be there');
+      throw new BadRequestException('At-least One Vehicle Image is required');
     }
 
-    // TODO Create new Vehicle
-    return files.vehicleImages.length;
+    return this.profileService.createNewUserVehicle(
+      user.id,
+      body,
+      files.vehicleImages,
+    );
   }
 
+  // Update Profile
   @Put('')
+  @ApiOperation({
+    summary: 'Update User Profile',
+  })
   @ApiBadRequestResponse({
     description: 'User is not signed up',
   })
@@ -141,6 +170,7 @@ export class ProfileController {
     description: 'User Profile Updated',
     type: UserDto,
   })
+  @Serialize(UserDto)
   updateProfile(@Body() body: UpdateUserDto, @CurrentUser() user: any) {
     if (!user.signedUp) {
       throw new BadRequestException('User is not signed up');

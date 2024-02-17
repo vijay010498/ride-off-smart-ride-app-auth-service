@@ -31,6 +31,9 @@ async function bootstrap() {
     'aws_sqs_queue_name',
     'aws_sqs_queue_url',
     'aws_region',
+    'aws_s3_access_key_id',
+    'aws_s3_secret_access_key',
+    'aws_auth_s3_bucket',
   ];
 
   const missingVariables = requiredEnvVariables.filter((variable) => {

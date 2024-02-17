@@ -15,6 +15,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { SqsModule } from './sqs/sqs.module';
 import { SqsProcessorModule } from './sqs_processor/sqs_processor.module';
 import { SnsModule } from './sns/sns.module';
+import { S3Module } from './s3/s3.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -48,6 +49,7 @@ import { SnsModule } from './sns/sns.module';
     SqsModule,
     SqsProcessorModule,
     SnsModule,
+    S3Module,
   ],
   controllers: [AppController],
   providers: [AppService],

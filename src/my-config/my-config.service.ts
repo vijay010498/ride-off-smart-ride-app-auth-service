@@ -56,4 +56,15 @@ export class MyConfigService {
   getSqsQueueURL(): string {
     return this.configService.get<string>('aws_sqs_queue_url');
   }
+  getAWSS3AccessID(): string {
+    return this.configService.get<string>('aws_s3_access_key_id');
+  }
+
+  getAWSS3SecretKey(): string {
+    return this.configService.get<string>('aws_s3_secret_access_key');
+  }
+
+  getAWSS3BucketName(): string {
+    return this.configService.get<string>('aws_auth_s3_bucket');
+  }
 }
