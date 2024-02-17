@@ -2,7 +2,7 @@ import { Expose, Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 export class VehicleDto {
   @ApiProperty()
-  @Transform(({ obj }) => obj.id)
+  @Transform(({ obj }) => obj._id)
   @Expose()
   vehicleId: string;
 

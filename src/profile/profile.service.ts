@@ -82,4 +82,14 @@ export class ProfileService {
       userId,
     });
   }
+
+  async deleteUserVehicle(
+    vehicleId: mongoose.Types.ObjectId,
+    userId: mongoose.Types.ObjectId,
+  ) {
+    return this.userVehicleCollection.findOneAndDelete({
+      _id: vehicleId,
+      userId,
+    });
+  }
 }

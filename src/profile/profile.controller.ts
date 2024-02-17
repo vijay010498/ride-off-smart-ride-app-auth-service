@@ -2,7 +2,9 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Put,
   UploadedFiles,
@@ -27,6 +29,7 @@ import {
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -37,6 +40,8 @@ import { ImageFileFilter } from './ImageFileFilter';
 import { VehicleImagesDto } from './dtos/vehicle-images.dto';
 import { VehicleTypeEnum } from './schemas/user-vehicle.schema';
 import { VehicleDto } from './dtos/vehicle.dto';
+import mongoose from 'mongoose';
+import { DeleteVehicleDto } from './dtos/delete-vehicle.dto';
 
 @ApiBearerAuth()
 @ApiTags('PROFILE')
@@ -169,6 +174,24 @@ export class ProfileController {
   @Serialize(VehicleDto)
   getUserVehicles(@CurrentUser() user: any) {
     return this.profileService.getUserVehicles(user.id);
+  }
+
+  @Delete('/vehicle/:id')
+  @ApiOperation({
+    summary: 'Delete a given User Vehicle',
+  })
+  @ApiResponse({
+    description: 'Vehicle Deleted',
+    type: VehicleDto,
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Vehicle ID',
+    type: String,
+  })
+  @Serialize(VehicleDto)
+  deleteVehicle(@Param() params: DeleteVehicleDto, @CurrentUser() user: any) {
+    return this.profileService.deleteUserVehicle(params.id, user.id);
   }
 
   // Update Profile
