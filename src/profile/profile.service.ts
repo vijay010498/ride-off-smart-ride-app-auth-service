@@ -13,7 +13,6 @@ import {
   UserVehicle,
   UserVehicleDocument,
 } from './schemas/user-vehicle.schema';
-import { CreateVehicleResponseDto } from './dtos/create-vehicle-response.dto';
 
 @Injectable()
 export class ProfileService {
@@ -48,8 +47,8 @@ export class ProfileService {
         vehicleImagesObjectURLs.push(imageURL);
       });
 
-      // step - 2 create new user vehicle into collection
-      await this._createNewVehicleWithGivenId(vehicleId, {
+      // step - 2 create new user vehicle into collection and return vehicle
+      return this._createNewVehicleWithGivenId(vehicleId, {
         color: data.color,
         licensePlate: data.licensePlate,
         model: data.model,
@@ -58,12 +57,6 @@ export class ProfileService {
         vehicleImagesObjectURLs,
         vehicleImagesS3URIs,
         year: data.year,
-      });
-
-      // step - 3 return the response
-      return new CreateVehicleResponseDto({
-        status: 'success',
-        message: 'Vehicle Created Successfully',
       });
     } catch (error) {
       this.logger.error('createNewUserVehicle-error', error);

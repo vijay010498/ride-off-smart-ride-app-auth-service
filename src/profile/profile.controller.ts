@@ -35,8 +35,8 @@ import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ImageFileFilter } from './ImageFileFilter';
 import { VehicleImagesDto } from './dtos/vehicle-images.dto';
-import { CreateVehicleResponseDto } from './dtos/create-vehicle-response.dto';
 import { VehicleTypeEnum } from './schemas/user-vehicle.schema';
+import { VehicleDto } from './dtos/vehicle.dto';
 
 @ApiBearerAuth()
 @ApiTags('PROFILE')
@@ -140,8 +140,9 @@ export class ProfileController {
   })
   @ApiCreatedResponse({
     description: 'New Vehicle Created',
-    type: CreateVehicleResponseDto,
+    type: VehicleDto,
   })
+  @Serialize(VehicleDto)
   createNewVehicle(
     @Body() body: CreateVehicleDto,
     @UploadedFiles() files: VehicleImagesDto,
@@ -157,6 +158,8 @@ export class ProfileController {
       files.vehicleImages,
     );
   }
+
+  @Get('/vehicles')
 
   // Update Profile
   @Put('')
