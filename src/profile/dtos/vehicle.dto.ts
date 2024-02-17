@@ -27,6 +27,7 @@ export class VehicleDto {
   licensePlate: string;
 
   @ApiProperty()
+  @Transform(({ obj }) => obj.vehicleImagesObjectURLs)
   @Expose()
-  vehicleImagesObjectURLs: string[];
+  vehicleImages: string[];
 }

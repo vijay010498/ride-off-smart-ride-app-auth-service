@@ -160,6 +160,16 @@ export class ProfileController {
   }
 
   @Get('/vehicles')
+  @ApiOperation({
+    summary: 'Get User Vehicles',
+  })
+  @ApiResponse({
+    type: [VehicleDto],
+  })
+  @Serialize(VehicleDto)
+  getUserVehicles(@CurrentUser() user: any) {
+    return this.profileService.getUserVehicles(user.id);
+  }
 
   // Update Profile
   @Put('')

@@ -76,4 +76,10 @@ export class ProfileService {
     });
     return vehicle.save();
   }
+
+  async getUserVehicles(userId: mongoose.Types.ObjectId) {
+    return this.userVehicleCollection.find({
+      userId,
+    });
+  }
 }
