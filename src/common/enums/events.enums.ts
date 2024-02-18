@@ -3,4 +3,6 @@ export enum Events {
   userUpdated = 'AUTH_USER_UPDATED',
   tokenBlackList = 'AUTH_TOKEN_BLACKLIST',
   userFaceVerified = 'VERIFY_USER_FACE_VERIFIED',
+  newVehicleCreated = 'AUTH_NEW_VEHICLE_CREATED',
+  vehicleDeleted = 'AUTH_VEHICLE_DELETED',
 }
