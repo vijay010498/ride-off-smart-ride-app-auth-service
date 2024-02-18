@@ -6,7 +6,8 @@ import {
   Get,
   Param,
   Post,
-  Put, UnprocessableEntityException,
+  Put,
+  UnprocessableEntityException,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -32,7 +33,8 @@ import {
   ApiParam,
   ApiResponse,
   ApiTags,
-  ApiUnauthorizedResponse, ApiUnprocessableEntityResponse,
+  ApiUnauthorizedResponse,
+  ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
