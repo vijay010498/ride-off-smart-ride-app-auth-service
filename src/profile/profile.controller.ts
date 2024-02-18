@@ -183,6 +183,9 @@ export class ProfileController {
     description: 'Vehicle Deleted',
     type: VehicleDto,
   })
+  @ApiBadRequestResponse({
+    description: 'Vehicle Not Found',
+  })
   @ApiParam({
     name: 'id',
     description: 'Vehicle ID',

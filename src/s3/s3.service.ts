@@ -1,5 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  PutObjectCommand,
+  S3Client,
+  DeleteObjectsCommand,
+  ListObjectsCommand,
+} from '@aws-sdk/client-s3';
 import { MyConfigService } from '../my-config/my-config.service';
 import mongoose from 'mongoose';
 
@@ -50,5 +55,81 @@ export class S3Service {
         return this._uploadFile(imageKey, image);
       }),
     );
+  }
+
+  // async deleteVehicleImages(
+  //   userId: mongoose.Types.ObjectId,
+  //   vehicleId: mongoose.Types.ObjectId,
+  // ) {
+  //   try {
+  //     const prefix = `${userId}/vehicles/${vehicleId}/images/`;
+  //     const listObjectsCommand = {
+  //       Bucket: this.configService.getAWSS3BucketName(),
+  //       Prefix: prefix,
+  //     };
+  //     const { Contents } = await this.S3.send(
+  //       new ListObjectsCommand(listObjectsCommand),
+  //     );
+  //
+  //     if (Contents && Contents.length > 0) {
+  //       const imagesToDelete = Contents.filter(
+  //         ({ Key }) => Key.endsWith('.jpg') || Key.endsWith('.jpeg'),
+  //       );
+  //       if (imagesToDelete.length > 0) {
+  //         const deleteObjects = imagesToDelete.map(({ Key }) => ({ Key }));
+  //         const deleteCommandRequest = {
+  //           Bucket: this.configService.getAWSS3BucketName(),
+  //           Delete: { Objects: deleteObjects },
+  //         };
+  //
+  //         await this.S3.send(new DeleteObjectsCommand(deleteCommandRequest));
+  //         this.logger.log('Deleted Vehicle Images');
+  //       } else {
+  //         this.logger.log('No images found to delete');
+  //       }
+  //     } else {
+  //       this.logger.log('No objects found to delete');
+  //     }
+  //   } catch (error) {
+  //     this.logger.error('Error deleting Vehicle Images', error);
+  //     throw error;
+  //   }
+  // }
+
+  async deleteVehicleImages(
+    userId: mongoose.Types.ObjectId,
+    vehicleId: mongoose.Types.ObjectId,
+  ) {
+    try {
+      const prefix = `${userId}/vehicles/${vehicleId}/images/`;
+      const listObjectsCommand = {
+        Bucket: this.configService.getAWSS3BucketName(),
+        Prefix: prefix,
+      };
+      const { Contents } = await this.S3.send(
+        new ListObjectsCommand(listObjectsCommand),
+      );
+
+      if (Contents && Contents.length > 0) {
+        const objectsToDelete = Contents.map(({ Key }) => ({ Key }));
+        const deleteCommandRequest = {
+          Bucket: this.configService.getAWSS3BucketName(),
+          Delete: { Objects: objectsToDelete },
+        };
+
+        await this.S3.send(new DeleteObjectsCommand(deleteCommandRequest));
+        this.logger.log('Deleted all objects inside the "images" folder');
+      } else {
+        this.logger.log(
+          'No objects found to delete inside the "images" folder',
+        );
+      }
+    } catch (error) {
+      this.logger.error(
+        'Error deleting objects inside the "images" folder',
+        error,
+      );
+      throw error;
+    }
   }
 }

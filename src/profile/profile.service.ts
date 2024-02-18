@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -99,8 +100,13 @@ export class ProfileService {
       userId,
     });
 
+    if (!deletedVehicle) throw new BadRequestException('Vehicle Not Found');
+
+    // Delete Vehicle Images
+    await this.s3.deleteVehicleImages(userId, vehicleId);
+
     // SNS Event
-    this.sns.vehicleDeletedEvent(deletedVehicle);
+    if (deletedVehicle) this.sns.vehicleDeletedEvent(deletedVehicle);
 
     return deletedVehicle;
   }
