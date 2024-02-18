@@ -57,45 +57,6 @@ export class S3Service {
     );
   }
 
-  // async deleteVehicleImages(
-  //   userId: mongoose.Types.ObjectId,
-  //   vehicleId: mongoose.Types.ObjectId,
-  // ) {
-  //   try {
-  //     const prefix = `${userId}/vehicles/${vehicleId}/images/`;
-  //     const listObjectsCommand = {
-  //       Bucket: this.configService.getAWSS3BucketName(),
-  //       Prefix: prefix,
-  //     };
-  //     const { Contents } = await this.S3.send(
-  //       new ListObjectsCommand(listObjectsCommand),
-  //     );
-  //
-  //     if (Contents && Contents.length > 0) {
-  //       const imagesToDelete = Contents.filter(
-  //         ({ Key }) => Key.endsWith('.jpg') || Key.endsWith('.jpeg'),
-  //       );
-  //       if (imagesToDelete.length > 0) {
-  //         const deleteObjects = imagesToDelete.map(({ Key }) => ({ Key }));
-  //         const deleteCommandRequest = {
-  //           Bucket: this.configService.getAWSS3BucketName(),
-  //           Delete: { Objects: deleteObjects },
-  //         };
-  //
-  //         await this.S3.send(new DeleteObjectsCommand(deleteCommandRequest));
-  //         this.logger.log('Deleted Vehicle Images');
-  //       } else {
-  //         this.logger.log('No images found to delete');
-  //       }
-  //     } else {
-  //       this.logger.log('No objects found to delete');
-  //     }
-  //   } catch (error) {
-  //     this.logger.error('Error deleting Vehicle Images', error);
-  //     throw error;
-  //   }
-  // }
-
   async deleteVehicleImages(
     userId: mongoose.Types.ObjectId,
     vehicleId: mongoose.Types.ObjectId,

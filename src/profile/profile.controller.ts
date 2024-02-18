@@ -6,7 +6,7 @@ import {
   Get,
   Param,
   Post,
-  Put,
+  Put, UnprocessableEntityException,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -32,7 +32,7 @@ import {
   ApiParam,
   ApiResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
+  ApiUnauthorizedResponse, ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
@@ -201,7 +201,7 @@ export class ProfileController {
   @ApiOperation({
     summary: 'Update User Profile',
   })
-  @ApiBadRequestResponse({
+  @ApiUnprocessableEntityResponse({
     description: 'User is not signed up',
   })
   @ApiCreatedResponse({
@@ -211,7 +211,7 @@ export class ProfileController {
   @Serialize(UserDto)
   updateProfile(@Body() body: UpdateUserDto, @CurrentUser() user: any) {
     if (!user.signedUp) {
-      throw new BadRequestException('User is not signed up');
+      throw new UnprocessableEntityException('User is not signed up');
     }
     return this.profileService.updateProfile(user.id, body);
   }
