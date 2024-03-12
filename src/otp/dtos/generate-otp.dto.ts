@@ -1,4 +1,4 @@
-import { Matches } from 'class-validator';
+import { IsNotEmpty, Matches } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GenerateOtpDto {
@@ -9,5 +9,6 @@ export class GenerateOtpDto {
   @Matches(/^\d{3}-\d{3}-\d{4}$/, {
     message: 'Phone Number must be in format 556-556-4035',
   })
+  @IsNotEmpty()
   phoneNumber: string;
 }
