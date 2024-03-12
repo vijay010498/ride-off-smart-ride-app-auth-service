@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { GenerateOtpDto } from './generate-otp.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -7,5 +7,6 @@ export class VerifyOptDto extends GenerateOtpDto {
     description: 'Enter Received OTP',
   })
   @IsString()
+  @IsNotEmpty()
   userOtp: string;
 }

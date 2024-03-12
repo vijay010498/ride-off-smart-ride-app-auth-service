@@ -90,7 +90,7 @@ export class ProfileController {
           },
           maximum: 5,
           description:
-            'Array of image files (only .jpg or .jpeg files allowed)',
+            'Array of image files (only .jpg or .jpeg files allowed) - Max 5 Images',
         },
         model: {
           type: 'string',
@@ -112,6 +112,10 @@ export class ProfileController {
           type: 'string',
           description: 'Vehicle LicensePlate',
         },
+        averageKmPerLitre: {
+          type: 'string',
+          description: 'Average KM per Liter',
+        },
       },
       required: [
         'vehicleImages',
@@ -120,6 +124,7 @@ export class ProfileController {
         'color',
         'year',
         'licensePlate',
+        'averageKmPerLitre',
       ],
     },
   })

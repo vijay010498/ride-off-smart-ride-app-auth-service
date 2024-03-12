@@ -60,6 +60,7 @@ export class ProfileService {
         vehicleImagesObjectURLs,
         vehicleImagesS3URIs,
         year: data.year,
+        averageKmPerLitre: parseInt(data.averageKmPerLitre),
       });
     } catch (error) {
       this.logger.error('createNewUserVehicle-error', error);
