@@ -4,11 +4,13 @@ import { MyConfigService } from '../my-config/my-config.service';
 import { UserDocument } from '../user/user.schema';
 import { Events } from '../common/enums/events.enums';
 import { UserVehicleDocument } from '../profile/schemas/user-vehicle.schema';
+import * as twilio from 'twilio';
 
 @Injectable()
 export class SnsService {
   private readonly logger = new Logger(SnsService.name);
   private readonly SNS: SNSClient;
+  private readonly twilio: twilio.Twilio;
 
   constructor(private readonly configService: MyConfigService) {
     this.SNS = new SNSClient({
@@ -19,27 +21,51 @@ export class SnsService {
         secretAccessKey: this.configService.getAWSSNSSecretKey(),
       },
     });
+
+    this.twilio = twilio(
+      this.configService.getTwilioSID(),
+      this.configService.getTwilioSecret(),
+      {
+        autoRetry: true,
+        maxRetries: 3,
+        region: 'US1',
+        edge: 'ashburn',
+        accountSid: this.configService.getTwilioAccountSID(),
+      },
+    );
   }
 
   async sendOtpToPhone(phoneNumber: string, OTP: string) {
     const MESSAGE = `Your verification code is ${OTP}, expires in 5 Minutes - Smart Ride App`;
-    const smsParams = {
-      Message: MESSAGE,
-      PhoneNumber: `+1${phoneNumber}`,
-      MessageAttributes: {
-        'AWS.SNS.SMS.SenderID': {
-          DataType: 'String',
-          StringValue: 'RideOff',
-        },
-        'AWS.SNS.SMS.SMSType': {
-          DataType: 'String',
-          StringValue: 'Transactional',
-        },
-      },
-    };
+    // AWS SMS Code
+    // const smsParams = {
+    //   Message: MESSAGE,
+    //   PhoneNumber: `+1${phoneNumber}`,
+    //   MessageAttributes: {
+    //     'AWS.SNS.SMS.SenderID': {
+    //       DataType: 'String',
+    //       StringValue: 'RideOff',
+    //     },
+    //     'AWS.SNS.SMS.SMSType': {
+    //       DataType: 'String',
+    //       StringValue: 'Transactional',
+    //     },
+    //   },
+    // };
     try {
-      const { MessageId } = await this.SNS.send(new PublishCommand(smsParams));
-      this.logger.log('Otp Sent Successfully Message-ID', MessageId);
+      const response = await this.twilio.messages.create({
+        body: MESSAGE,
+        from: this.configService.getTwilioNumber(),
+        to: `+1${phoneNumber}`,
+      });
+      this.logger.log(
+        'Otp Sent Successfully Message ID - ',
+        response.sid,
+        response.status,
+      );
+      // AWS SMS Code
+      // const { MessageId } = await this.SNS.send(new PublishCommand(smsParams));
+      // this.logger.log('Otp Sent Successfully Message-ID', MessageId);
     } catch (sendOtpToPhoneError) {
       this.logger.error('sendOtpToPhoneError', sendOtpToPhoneError);
     }
