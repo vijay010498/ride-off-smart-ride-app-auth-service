@@ -34,6 +34,10 @@ async function bootstrap() {
     'aws_s3_access_key_id',
     'aws_s3_secret_access_key',
     'aws_auth_s3_bucket',
+    'TWILIO_ACCOUNT_SID',
+    'TWILIO_SID',
+    'TWILIO_SECRET',
+    'TWILIO_NUMBER',
   ];
 
   const missingVariables = requiredEnvVariables.filter((variable) => {

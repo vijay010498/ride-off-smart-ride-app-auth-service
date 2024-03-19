@@ -67,4 +67,17 @@ export class MyConfigService {
   getAWSS3BucketName(): string {
     return this.configService.get<string>('aws_auth_s3_bucket');
   }
+  getTwilioSID(): string {
+    return this.configService.get<string>('TWILIO_SID');
+  }
+
+  getTwilioAccountSID(): string {
+    return this.configService.get<string>('TWILIO_ACCOUNT_SID');
+  }
+  getTwilioSecret(): string {
+    return this.configService.get<string>('TWILIO_SECRET');
+  }
+  getTwilioNumber(): string {
+    return this.configService.get<string>('TWILIO_NUMBER');
+  }
 }
