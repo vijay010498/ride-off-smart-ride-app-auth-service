@@ -57,6 +57,11 @@ export class User {
     coordinates: { type: [Number], default: [0, 0] }, // [longitude, latitude]
   })
   lastLocation: Location;
+
+  @Prop({
+    default: false,
+  })
+  online: boolean;
 }
 
 export type UserDocument = User & Document;

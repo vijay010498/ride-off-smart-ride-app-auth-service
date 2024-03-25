@@ -43,6 +43,8 @@ import { VehicleImagesDto } from './dtos/vehicle-images.dto';
 import { VehicleTypeEnum } from './schemas/user-vehicle.schema';
 import { VehicleDto } from './dtos/vehicle.dto';
 import { DeleteVehicleDto } from './dtos/delete-vehicle.dto';
+import { UserDocument } from '../user/user.schema';
+import { IsFaceVerifiedGuard } from '../common/guards/isFaceVerified.guard';
 
 @ApiBearerAuth()
 @ApiTags('PROFILE')
@@ -221,5 +223,26 @@ export class ProfileController {
       throw new UnprocessableEntityException('User is not signed up');
     }
     return this.profileService.updateProfile(user.id, body);
+  }
+
+  // User Online Changes
+  @Put('/status')
+  @ApiOperation({
+    summary: 'Makes User Online / Ofline',
+  })
+  @ApiCreatedResponse({
+    description: 'User Status Changes',
+    type: UserDto,
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Please try again later',
+  })
+  @ApiUnprocessableEntityResponse({
+    description: 'Must Be Face Id Verified to Go Online as Driver',
+  })
+  @Serialize(UserDto)
+  @UseGuards(IsFaceVerifiedGuard)
+  changeUserStatus(@CurrentUser() user: UserDocument) {
+    return this.profileService.updateUserStatus(user.id, user.online);
   }
 }
