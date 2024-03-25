@@ -47,7 +47,7 @@ export class UserService {
   }
 
   private async _update(
-    id: string,
+    id: string | mongoose.Types.ObjectId,
     updateUserDto:
       | UpdateTokensDto
       | UpdateUserDto
@@ -76,7 +76,10 @@ export class UserService {
   }
 
   // Update User - Used in Profile Service
-  async updateProfile(userId: string, updateUserDto: UpdateUserDto) {
+  async updateProfile(
+    userId: string | mongoose.Types.ObjectId,
+    updateUserDto: UpdateUserDto | Partial<UserDocument>,
+  ) {
     const updatedUser = await this._update(userId, updateUserDto);
 
     // No need of await since we don't need to wait

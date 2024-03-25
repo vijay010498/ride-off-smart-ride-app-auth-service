@@ -46,4 +46,8 @@ export class UserDto {
   @Transform(({ obj }) => obj._id)
   @Expose()
   userId: string;
+
+  @ApiProperty()
+  @Expose()
+  online: boolean;
 }

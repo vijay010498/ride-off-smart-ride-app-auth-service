@@ -111,4 +111,15 @@ export class ProfileService {
 
     return deletedVehicle;
   }
+
+  updateUserStatus(id: mongoose.Types.ObjectId, currentStatus: boolean) {
+    try {
+      return this.userService.updateProfile(id, {
+        online: !currentStatus,
+      });
+    } catch (error) {
+      this.logger.error('updateUserStatus-error', error);
+      throw new InternalServerErrorException('Please try again later');
+    }
+  }
 }
