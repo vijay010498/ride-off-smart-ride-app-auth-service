@@ -5,8 +5,8 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
   UnprocessableEntityException,
   UploadedFiles,
   UseGuards,
@@ -206,7 +206,7 @@ export class ProfileController {
   }
 
   // Update Profile
-  @Put('')
+  @Patch('')
   @ApiOperation({
     summary: 'Update User Profile',
   })
@@ -226,7 +226,7 @@ export class ProfileController {
   }
 
   // User Online Changes
-  @Put('/status')
+  @Patch('/status')
   @ApiOperation({
     summary: 'Makes User Online / Ofline',
   })
