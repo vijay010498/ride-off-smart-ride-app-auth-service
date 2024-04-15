@@ -15,6 +15,7 @@ import { SqsModule } from './sqs/sqs.module';
 import { SqsProcessorModule } from './sqs_processor/sqs_processor.module';
 import { SnsModule } from './sns/sns.module';
 import { S3Module } from './s3/s3.module';
+import { HealthModule } from './health/health.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -48,6 +49,7 @@ import { S3Module } from './s3/s3.module';
     SqsProcessorModule,
     SnsModule,
     S3Module,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
